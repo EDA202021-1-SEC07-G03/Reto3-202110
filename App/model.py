@@ -38,7 +38,17 @@ los mismos.
 """
 
 # Construccion de modelos
+def newAnalyzer():
+    analyzer = {'hashtag_times': None,
+                'context_content': None,
+                'sentiment_values':None
+                }
 
+    analyzer['hashtag_times'] = lt.newList('SINGLE_LINKED', compareIds)
+    analyzer['context_content'] = om.newMap(omaptype='BST',
+                                      comparefunction=compareDates)
+    analyzer['sentiment_values']=None
+    return analyzer
 # Funciones para agregar informacion al catalogo
 
 # Funciones para creacion de datos

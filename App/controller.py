@@ -29,10 +29,18 @@ import csv
 El controlador se encarga de mediar entre la vista y el modelo.
 """
 
-# Inicialización del Catálogo de libros
-
+# Inicialización del Catálogo 
+def init():
+    analyzer = model.newAnalyzer()
+    return analyzer
 # Funciones para la carga de datos
-
+def loadData(analyzer, filename):
+    crimesfile = cf.data_dir + filename
+    input_file = csv.DictReader(open(filename, encoding="utf-8"),
+                                delimiter=",")
+    for line in filename:
+        model.add(analyzer, line)
+    return analyzer
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
