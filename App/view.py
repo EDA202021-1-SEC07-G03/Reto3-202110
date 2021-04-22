@@ -25,7 +25,7 @@ import sys
 import controller
 from DISClib.ADT import list as lt
 assert cf
-filename='context_content_features-small.csv'
+filename='context_content_features-test.csv'
 cont=None
 def printMenu():
     print("Bienvenido")
@@ -48,7 +48,7 @@ while True:
         cont = controller.init()
 
     elif int(inputs[0]) == 2:
-        print("\nCargando información de crimenes ....")
+        print("\nCargando información de tracks ....")
         controller.loadData(cont, filename)
         print('Tracks cargados: ' + str(controller.contador_tracks(cont)))
         '''
@@ -57,7 +57,7 @@ while True:
         '''
     
     elif int(inputs[0]) == 3:
-        car=input('Ingrese la característica a consultar: ')
+        car=input('Ingrese la característica a consultar: ').lower()
         min_value=float(input('Ingrese el valor mínimo para el rango de la característica: '))
         max_value=float(input('Ingrese el valor máximo para el rango de la característica: '))
         print(controller.rep_car(cont,car,min_value,max_value))

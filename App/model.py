@@ -58,7 +58,7 @@ def update(map,track,car):
     #addIndex(datentry, track)
     return map
 def newDataEntry(track):
-    entry = mp.newMap(numelements=6000,maptype='PROBING',comparefunction=compareEntry)
+    entry = mp.newMap(numelements=5,maptype='PROBING')
     mp.put(entry,'user_id',track['user_id'])
     mp.put(entry,'track_id',track['track_id'])
     return entry
@@ -119,15 +119,17 @@ def compareIds(id1, id2):
 
 
 def compare(dato1, dato2):
-    if (dato1 == dato2):
-        return 0
-    elif (dato1 > dato2):
-        return 1
-    else:
-        return -1
-
+    dato1=float(dato1)
+    dato2=float(dato2)
+        if (dato1 == dato2):
+            return 0
+        elif (dato1 > dato2):
+            return 1
+        else:
+            return -1
 
 def compareEntry(dato1, dato2):
+    #print('dato1:',dato1,'dato2:',dato2)
     if (dato1 == dato2):
         return 0
     elif (dato1 > dato2):
