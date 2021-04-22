@@ -29,7 +29,7 @@ import config
 from DISClib.ADT import list as lt
 from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
-from DISClib.ADT import map as m
+from DISClib.ADT import map as mp
 import datetime
 assert config
 # Construccion de modelos
@@ -58,15 +58,21 @@ def update(map,track,car):
     addIndex(datentry, track)
     return map
 def newDataEntry(track):
-    entry = {'track_id': None, 'index': None}
+    entry = m.newMap(numelements=5,maptype='PROBING',comparefunction=compare)
+    mp.put(entry,'user_id',track['user_id'])
+    mp.put(entry,'track_id',track['track_id'])
+    return entry
+'''
+def newDataEntry(track):
+    entry = {'index': None, 'lista': None}
     entry['index'] = m.newMap(numelements=30,maptype='PROBING',comparefunction=compareOffenses)
-    entry['lstcrimes'] = lt.newList('SINGLE_LINKED', compareDates)
+    entry['lista'] = lt.newList('SINGLE_LINKED', compareDates)
     return entry
 def addIndex(datentry, track):
-    lst = datentry['lstcrimes']
+    lst = datentry['lista']
     lt.addLast(lst, crime)
-    offenseIndex = datentry['offenseIndex']
-    offentry = m.get(offenseIndex, crime['OFFENSE_CODE_GROUP'])
+    Index = datentry['index']
+    entry = m.get(Index, track['OFFENSE_CODE_GROUP'])
     if (offentry is None):
         entry = newOffenseEntry(crime['OFFENSE_CODE_GROUP'], crime)
         lt.addLast(entry['lstoffenses'], crime)
@@ -75,7 +81,15 @@ def addIndex(datentry, track):
         entry = me.getValue(offentry)
         lt.addLast(entry['lstoffenses'], crime)
     return datentry
-
+def newOffenseEntry(offensegrp, crime):
+    """
+    Crea una entrada en el indice por tipo de crimen, es decir en
+    la tabla de hash, que se encuentra en cada nodo del arbol.
+    """
+    ofentry = {'offense': None, 'lstoffenses': None}
+    ofentry['offense'] = offensegrp
+    ofentry['lstoffenses'] = lt.newList('SINGLELINKED', compareOffenses)
+    return ofentry'''
 # Funciones para creacion de datos
 
 # Funciones de consulta

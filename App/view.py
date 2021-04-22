@@ -44,7 +44,6 @@ def printMenu():
     print("5- Encontrar musica para estudiar")
     print("6- Estudiar los generos musicales")
     print("7- Genero musical mas escuchado en el tiempo")
-    print(len(["instrumentalness","liveness","speechiness","danceability","valence","loudness","tempo","acousticness","energy","mode","key","artist_id","tweet_lang","track_id","created_at","lang","time_zone","user_id","id"]))
 catalog = None
 
 """
