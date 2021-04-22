@@ -55,7 +55,7 @@ def update(map,track,car):
         om.put(map, data, datentry)
     else:
         datentry = me.getValue(entry)
-    addIndex(datentry, track)
+    #addIndex(datentry, track)
     return map
 def newDataEntry(track):
     entry = m.newMap(numelements=5,maptype='PROBING',comparefunction=compare)
@@ -93,7 +93,11 @@ def newOffenseEntry(offensegrp, crime):
 # Funciones para creacion de datos
 
 # Funciones de consulta
-
+def rep_car(analyzer,car,min_value,max_value):
+    arbol=analyzer[car]
+    artist=lt.newList(lt.newList('ARRAY_LIST', compare))
+    validas=lt.newList(lt.newList('ARRAY_LIST', compare))
+        
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 # Funciones de ordenamiento
