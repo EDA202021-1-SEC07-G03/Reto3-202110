@@ -21,7 +21,8 @@
  """
 
 import config as cf
-import model
+from App import model
+import datetime
 import csv
 
 
@@ -35,10 +36,9 @@ def init():
     return analyzer
 # Funciones para la carga de datos
 def loadData(analyzer, filename):
-    crimesfile = cf.data_dir + filename
-    input_file = csv.DictReader(open(filename, encoding="utf-8"),
-                                delimiter=",")
-    for line in filename:
+    filename = cf.data_dir + filename
+    input_file = csv.DictReader(open(filename, encoding="utf-8"),delimiter=",")
+    for line in input_file:
         model.add(analyzer, line)
     return analyzer
 # Funciones de ordenamiento

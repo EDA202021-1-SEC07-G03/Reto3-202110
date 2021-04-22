@@ -33,7 +33,8 @@ Presenta el menu de opciones y por cada seleccion
 se hace la solicitud al controlador para ejecutar la
 operación solicitada
 """
-
+filename='context_content_features-small.csv'
+cont=None
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
@@ -53,10 +54,16 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
+        cont = controller.init()
 
     elif int(inputs[0]) == 2:
-        pass
-
+        print("\nCargando información de crimenes ....")
+        controller.loadData(cont, filename)
+        print('Crimenes cargados: ' + str(controller.crimesSize(cont)))
+        print('Altura del arbol: ' + str(controller.indexHeight(cont)))
+        print('Elementos en el arbol: ' + str(controller.indexSize(cont)))
+        print('Menor Llave: ' + str(controller.minKey(cont)))
+        print('Mayor Llave: ' + str(controller.maxKey(cont)))
     else:
         sys.exit(0)
 sys.exit(0)
