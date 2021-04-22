@@ -34,32 +34,35 @@ import datetime
 assert config
 # Construccion de modelos
 def newAnalyzer():
-    analyzer = {'tracks': None,'context':None}
+    analyzer = {'tracks': None,'instrumentalness':None,'acousticness':None,'liveness':None,'speechiness':None,'energy':None,'danceability':None,'valence':None}
     analyzer['tracks'] = lt.newList('SINGLE_LINKED', compareIds)
-    analyzer['context'] = om.newMap(omaptype='BST',comparefunction=compareDates)
+    for car in analyzer:
+        if car!='tracks':
+            analyzer[car] = om.newMap(omaptype='RBT',comparefunction=compare)
     return analyzer
 # Funciones para agregar informacion al catalogo
 def add(analyzer, track):
     lt.addLast(analyzer['tracks'], track)
-    updatecontext(analyzer['context'], track)
+    for car in analyzer:
+        if car!='tracks':
+            update(analyzer[car],track,car)
     return analyzer
-def updatecontext(map, track):
-    occurreddate = track['created_at']
-    created = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
-    entry = om.get(map, created.date())
+def update(map,track,car):
+    data = track[car]
+    entry = om.get(map, data)
     if entry is None:
         datentry = newDataEntry(track)
-        om.put(map, created.date(), datentry)
+        om.put(map, data, datentry)
     else:
         datentry = me.getValue(entry)
-    addDateIndex(datentry, track)
+    addIndex(datentry, track)
     return map
 def newDataEntry(track):
-    entry = {'offenseIndex': None, 'lstcrimes': None}
-    entry['offenseIndex'] = m.newMap(numelements=30,maptype='PROBING',comparefunction=compareOffenses)
+    entry = {'track_id': None, 'index': None}
+    entry['index'] = m.newMap(numelements=30,maptype='PROBING',comparefunction=compareOffenses)
     entry['lstcrimes'] = lt.newList('SINGLE_LINKED', compareDates)
     return entry
-def addDateIndex(datentry, crime):
+def addIndex(datentry, track):
     lst = datentry['lstcrimes']
     lt.addLast(lst, crime)
     offenseIndex = datentry['offenseIndex']
@@ -89,10 +92,10 @@ def compareIds(id1, id2):
         return -1
 
 
-def compareDates(date1, date2):
-    if (date1 == date2):
+def compare(dato1, dato2):
+    if (dato1 == dato2):
         return 0
-    elif (date1 > date2):
+    elif (dato1 > dato2):
         return 1
     else:
         return -1

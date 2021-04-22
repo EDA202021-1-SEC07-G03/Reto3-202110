@@ -37,13 +37,14 @@ filename='context_content_features-small.csv'
 cont=None
 def printMenu():
     print("Bienvenido")
-    print("1- Cargar información en el catálogo")
-    print("2- Consultar reproducciones en rango instrumentalidad")
-    print("3- Encontrar musica para festejar")
-    print("4- Encontrar musica para estudiar")
-    print("5- Estudiar los generos musicales")
-    print("6- Genero musical mas escuchado en el tiempo")
-
+    print("1- Iniciar el catálogo")
+    print("2- Cargar información en el catálogo")
+    print("3- Consultar reproducciones en rango de carácteristica de contenido")
+    print("4- Encontrar musica para festejar")
+    print("5- Encontrar musica para estudiar")
+    print("6- Estudiar los generos musicales")
+    print("7- Genero musical mas escuchado en el tiempo")
+    print(len(["instrumentalness","liveness","speechiness","danceability","valence","loudness","tempo","acousticness","energy","mode","key","artist_id","tweet_lang","track_id","created_at","lang","time_zone","user_id","id"]))
 catalog = None
 
 """
@@ -59,7 +60,7 @@ while True:
     elif int(inputs[0]) == 2:
         print("\nCargando información de crimenes ....")
         controller.loadData(cont, filename)
-        print('Crimenes cargados: ' + str(controller.crimesSize(cont)))
+        print('Tracks cargados: ' + str(controller.crimesSize(cont)))
         print('Altura del arbol: ' + str(controller.indexHeight(cont)))
         print('Elementos en el arbol: ' + str(controller.indexSize(cont)))
         print('Menor Llave: ' + str(controller.minKey(cont)))
