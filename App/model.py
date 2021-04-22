@@ -34,7 +34,7 @@ import datetime
 assert config
 # Construccion de modelos
 def newAnalyzer():
-    analyzer = {'tracks': None,'instrumentalness':None,'acousticness':None,'liveness':None,'speechiness':None,'energy':None,'danceability':None,'valence':None}
+    analyzer = {'tracks':None,'instrumentalness':None,'acousticness':None,'liveness':None,'speechiness':None,'energy':None,'danceability':None,'valence':None}
     analyzer['tracks'] = lt.newList('SINGLE_LINKED', compareIds)
     for car in analyzer:
         if car!='tracks':
@@ -48,7 +48,7 @@ def add(analyzer, track):
             update(analyzer[car],track,car)
     return analyzer
 def update(map,track,car):
-    data = track[car]
+    data = float(track[car])
     entry = om.get(map, data)
     if entry is None:
         datentry = newDataEntry(track)
@@ -58,7 +58,7 @@ def update(map,track,car):
     #addIndex(datentry, track)
     return map
 def newDataEntry(track):
-    entry = mp.newMap(numelements=5,maptype='PROBING')
+    entry = mp.newMap(numelements=2,maptype='PROBING',loadfactor=1)
     mp.put(entry,'user_id',track['user_id'])
     mp.put(entry,'track_id',track['track_id'])
     return entry
@@ -95,14 +95,13 @@ def newOffenseEntry(offensegrp, crime):
 # Funciones de consulta
 def rep_car(analyzer,car,min_value,max_value):
     arbol=analyzer[car]
-    artist=lt.newList('ARRAY_LIST', compare)
+    artist=lt.newList('ARRAY_LIST')
     validas=om.values(arbol,min_value,max_value)
-    for i in range(1+lt.size(validas)):
-        llave=lt.getElement(validas,i)
-        mapa_interno=om.get(arbol,llave)
+    for i in range(1,lt.size(validas)):
+        mapa_interno=lt.getElement(validas,i)
         user=me.getValue(mp.get(mapa_interno,'user_id'))
         if lt.isPresent(artist,user)==0:
-            lt.addLast(user)
+            lt.addLast(artist,user)
     return lt.size(validas),lt.size(artist)
 
         
@@ -119,17 +118,7 @@ def compareIds(id1, id2):
 
 
 def compare(dato1, dato2):
-    dato1=float(dato1)
-    dato2=float(dato2)
-        if (dato1 == dato2):
-            return 0
-        elif (dato1 > dato2):
-            return 1
-        else:
-            return -1
-
-def compareEntry(dato1, dato2):
-    #print('dato1:',dato1,'dato2:',dato2)
+    #print('dato1:',dato1,'\ndato2:',dato2)
     if (dato1 == dato2):
         return 0
     elif (dato1 > dato2):

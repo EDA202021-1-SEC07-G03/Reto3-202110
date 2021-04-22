@@ -25,7 +25,7 @@ import sys
 import controller
 from DISClib.ADT import list as lt
 assert cf
-filename='context_content_features-test.csv'
+filename='context_content_features-small.csv'
 cont=None
 def printMenu():
     print("Bienvenido")
@@ -60,7 +60,15 @@ while True:
         car=input('Ingrese la característica a consultar: ').lower()
         min_value=float(input('Ingrese el valor mínimo para el rango de la característica: '))
         max_value=float(input('Ingrese el valor máximo para el rango de la característica: '))
-        print(controller.rep_car(cont,car,min_value,max_value))
+        #print(controller.rep_car(cont,'instrumentalness',0.0,0.9))
+        funcion=controller.rep_car(cont,car,min_value,max_value)
+        reps=funcion[0]
+        artistas=funcion[1]
+        print('*'*60)
+        print('La característica',car,'está en el rango de',min_value,'a',max_value)
+        print('Reproducciones:',reps)
+        print('Artistas:',artistas)
+        print('*'*60)
     else:
         sys.exit(0)
 sys.exit(0)
