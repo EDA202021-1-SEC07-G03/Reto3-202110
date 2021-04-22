@@ -44,3 +44,8 @@ def loadData(analyzer, filename):
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
+def rep_car(analyzer,car,min_value,max_value):
+    return model.rep_car(analyzer,car,min_value,max_value)
+
+def contador_tracks(analyzer):
+    return lt.size(analyzer['tracks'])

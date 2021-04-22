@@ -25,14 +25,6 @@ import sys
 import controller
 from DISClib.ADT import list as lt
 assert cf
-
-
-"""
-La vista se encarga de la interacción con el usuario
-Presenta el menu de opciones y por cada seleccion
-se hace la solicitud al controlador para ejecutar la
-operación solicitada
-"""
 filename='context_content_features-small.csv'
 cont=None
 def printMenu():
@@ -45,7 +37,6 @@ def printMenu():
     print("6- Estudiar los generos musicales")
     print("7- Genero musical mas escuchado en el tiempo")
 catalog = None
-
 """
 Menu principal
 """
@@ -59,11 +50,17 @@ while True:
     elif int(inputs[0]) == 2:
         print("\nCargando información de crimenes ....")
         controller.loadData(cont, filename)
-        print('Tracks cargados: ' + str(controller.crimesSize(cont)))
+        print('Tracks cargados: ' + str(controller.contador_tracks(cont)))
+        '''
         print('Altura del arbol: ' + str(controller.indexHeight(cont)))
         print('Elementos en el arbol: ' + str(controller.indexSize(cont)))
-        print('Menor Llave: ' + str(controller.minKey(cont)))
-        print('Mayor Llave: ' + str(controller.maxKey(cont)))
+        '''
+    
+    elif int(inputs[0]) == 3:
+        car=input('Ingrese la característica a consultar: ')
+        min_value=float(input('Ingrese el valor mínimo para el rango de la característica: '))
+        max_value=float(input('Ingrese el valor máximo para el rango de la característica: '))
+        print(controller.rep_car(cont,car,min_value,max_value))
     else:
         sys.exit(0)
 sys.exit(0)

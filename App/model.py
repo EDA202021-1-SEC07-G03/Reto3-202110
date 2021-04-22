@@ -58,7 +58,7 @@ def update(map,track,car):
     #addIndex(datentry, track)
     return map
 def newDataEntry(track):
-    entry = m.newMap(numelements=5,maptype='PROBING',comparefunction=compare)
+    entry = mp.newMap(numelements=6000,maptype='PROBING',comparefunction=compareEntry)
     mp.put(entry,'user_id',track['user_id'])
     mp.put(entry,'track_id',track['track_id'])
     return entry
@@ -96,7 +96,9 @@ def newOffenseEntry(offensegrp, crime):
 def rep_car(analyzer,car,min_value,max_value):
     arbol=analyzer[car]
     artist=lt.newList(lt.newList('ARRAY_LIST', compare))
-    validas=lt.newList(lt.newList('ARRAY_LIST', compare))
+    validas=om.values(arbol,min_value,max_value)
+    return lt.size(validas)
+
         
 # Funciones utilizadas para comparar elementos dentro de una lista
 
@@ -119,11 +121,10 @@ def compare(dato1, dato2):
         return -1
 
 
-def compareOffenses(offense1, offense2):
-    offense = me.getKey(offense2)
-    if (offense1 == offense):
+def compareEntry(dato1, dato2):
+    if (dato1 == dato2):
         return 0
-    elif (offense1 > offense):
+    elif (dato1 > dato2):
         return 1
     else:
         return -1
