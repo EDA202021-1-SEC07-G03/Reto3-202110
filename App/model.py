@@ -95,9 +95,15 @@ def newOffenseEntry(offensegrp, crime):
 # Funciones de consulta
 def rep_car(analyzer,car,min_value,max_value):
     arbol=analyzer[car]
-    artist=lt.newList(lt.newList('ARRAY_LIST', compare))
+    artist=lt.newList('ARRAY_LIST', compare)
     validas=om.values(arbol,min_value,max_value)
-    return lt.size(validas)
+    for i in range(1+lt.size(validas)):
+        llave=lt.getElement(validas,i)
+        mapa_interno=om.get(arbol,llave)
+        user=me.getValue(mp.get(mapa_interno,'user_id'))
+        if lt.isPresent(artist,user)==0:
+            lt.addLast(user)
+    return lt.size(validas),lt.size(artist)
 
         
 # Funciones utilizadas para comparar elementos dentro de una lista
