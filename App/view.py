@@ -57,10 +57,17 @@ while True:
         '''
     
     elif int(inputs[0]) == 3:
+        
         car=input('Ingrese la característica a consultar: ').lower()
         min_value=float(input('Ingrese el valor mínimo para el rango de la característica: '))
         max_value=float(input('Ingrese el valor máximo para el rango de la característica: '))
-        #print(controller.rep_car(cont,'instrumentalness',0.0,0.9))
+        '''
+        #pruebas
+
+        car='instrumentalness'
+        min_value=float(0.75)
+        max_value=float(1)
+        '''
         funcion=controller.rep_car(cont,car,min_value,max_value)
         reps=funcion[0]
         artistas=funcion[1]

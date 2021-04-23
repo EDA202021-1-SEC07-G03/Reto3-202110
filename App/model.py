@@ -48,63 +48,38 @@ def add(analyzer, track):
             update(analyzer[car],track,car)
     return analyzer
 def update(map,track,car):
+    #data hace referencia al valor de la característica, siendo la llave de los mapas
     data = float(track[car])
     entry = om.get(map, data)
     if entry is None:
-        datentry = newDataEntry(track)
-        om.put(map, data, datentry)
+        lst=lt.newList('ARRAY_LIST')
     else:
-        datentry = me.getValue(entry)
-    #addIndex(datentry, track)
+        lst = me.getValue(entry)
+    info_track=newDataEntry(track)
+    lt.addLast(lst,info_track)
+    om.put(map, data, lst)
     return map
+# Funciones para creacion de datos
 def newDataEntry(track):
     entry = mp.newMap(numelements=2,maptype='PROBING',loadfactor=1)
     mp.put(entry,'user_id',track['user_id'])
     mp.put(entry,'track_id',track['track_id'])
     return entry
-'''
-def newDataEntry(track):
-    entry = {'index': None, 'lista': None}
-    entry['index'] = m.newMap(numelements=30,maptype='PROBING',comparefunction=compareOffenses)
-    entry['lista'] = lt.newList('SINGLE_LINKED', compareDates)
-    return entry
-def addIndex(datentry, track):
-    lst = datentry['lista']
-    lt.addLast(lst, crime)
-    Index = datentry['index']
-    entry = m.get(Index, track['OFFENSE_CODE_GROUP'])
-    if (offentry is None):
-        entry = newOffenseEntry(crime['OFFENSE_CODE_GROUP'], crime)
-        lt.addLast(entry['lstoffenses'], crime)
-        m.put(offenseIndex, crime['OFFENSE_CODE_GROUP'], entry)
-    else:
-        entry = me.getValue(offentry)
-        lt.addLast(entry['lstoffenses'], crime)
-    return datentry
-def newOffenseEntry(offensegrp, crime):
-    """
-    Crea una entrada en el indice por tipo de crimen, es decir en
-    la tabla de hash, que se encuentra en cada nodo del arbol.
-    """
-    ofentry = {'offense': None, 'lstoffenses': None}
-    ofentry['offense'] = offensegrp
-    ofentry['lstoffenses'] = lt.newList('SINGLELINKED', compareOffenses)
-    return ofentry'''
-# Funciones para creacion de datos
-
 # Funciones de consulta
 def rep_car(analyzer,car,min_value,max_value):
     arbol=analyzer[car]
     artist=lt.newList('ARRAY_LIST')
     validas=om.values(arbol,min_value,max_value)
+    reps=0 #suma de tracks validos
     for i in range(1,lt.size(validas)):
-        mapa_interno=lt.getElement(validas,i)
-        user=me.getValue(mp.get(mapa_interno,'user_id'))
-        if lt.isPresent(artist,user)==0:
-            lt.addLast(artist,user)
-    return lt.size(validas),lt.size(artist)
-
-        
+        lista_interna=lt.getElement(validas,i)
+        reps+=lt.size(lista_interna)
+        for x in range(1,lt.size(lista_interna)):
+            mapa_interno=lt.getElement(lista_interna,x)
+            user=me.getValue(mp.get(mapa_interno,'user_id'))
+            if lt.isPresent(artist,user)==0:
+                lt.addLast(artist,user)
+    return reps,lt.size(artist)
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 # Funciones de ordenamiento
