@@ -79,7 +79,7 @@ def rep_car(analyzer,car,min_value,max_value):
         for x in range(1,lt.size(lista_interna)):
             mapa_interno=lt.getElement(lista_interna,x)
             user=me.getValue(mp.get(mapa_interno,'user_id'))
-            unicos(artists,user)
+            unicos(artist,user)
     return reps,lt.size(artist)
 def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
     canciones=lt.newList('ARRAY_LIST')
