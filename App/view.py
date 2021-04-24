@@ -25,6 +25,11 @@ import sys
 import controller
 from DISClib.ADT import list as lt
 assert cf
+from DISClib.ADT import list as lt
+from DISClib.ADT import orderedmap as om
+from DISClib.DataStructures import mapentry as me
+from DISClib.ADT import map as mp
+import datetime
 filename='context_content_features-small.csv'
 cont=None
 def printMenu():
@@ -57,7 +62,7 @@ while True:
         '''
     
     elif int(inputs[0]) == 3:
-        
+        '''
         car=input('Ingrese la característica a consultar: ').lower()
         min_value=float(input('Ingrese el valor mínimo para el rango de la característica: '))
         max_value=float(input('Ingrese el valor máximo para el rango de la característica: '))
@@ -67,7 +72,7 @@ while True:
         car='instrumentalness'
         min_value=float(0.75)
         max_value=float(1)
-        '''
+        
         funcion=controller.rep_car(cont,car,min_value,max_value)
         reps=funcion[0]
         artistas=funcion[1]
@@ -76,6 +81,35 @@ while True:
         print('Reproducciones:',reps)
         print('Artistas:',artistas)
         print('*'*60)
+    elif int(inputs[0]) == 4:
+        '''
+        min_energy=float(input('Ingrese el valor mínimo para Energy: '))
+        max_energy=float(input('Ingrese el valor máximo para Energy: '))
+        min_danceability=float(input('Ingrese el valor mínimo para Danceability: '))
+        max_danceability=float(input('Ingrese el valor máximo para Danceability: '))
+        '''
+        min_energy=float(0.5)
+        max_energy=float(0.75)
+        min_danceability=float(0.75)
+        max_danceability=float(1)
+        
+        funcion=controller.festejar(cont,min_energy,max_energy,min_danceability,max_danceability)
+        total=lt.size(funcion)
+        size=5
+        if total<5:
+            size=total
+        sub=lt.subList(funcion,0,size)
+        num=0
+        for i in range(1,lt.size(sub)):
+            num+=1
+            info=lt.getElement(funcion,i)
+            track_id=me.getValue(mp.get(info,'track_id'))
+            user_id=me.getValue(mp.get(info,'user_id'))
+            energy=me.getValue(mp.get(info,'energy'))
+            dance=me.getValue(mp.get(info,'danceability'))
+            print('Hay un total de canciones de:',total)
+            print('Track',num,':',track_id,'con energia de',energy,'y danceability de',dance)
+
     else:
         sys.exit(0)
 sys.exit(0)

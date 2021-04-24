@@ -50,6 +50,7 @@ def loadData(analyzer, filename):
 # Funciones de consulta sobre el catálogo
 def rep_car(analyzer,car,min_value,max_value):
     return model.rep_car(analyzer,car,min_value,max_value)
-
+def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
+    return model.festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability)
 def contador_tracks(analyzer):
     return lt.size(analyzer['tracks'])

@@ -45,9 +45,9 @@ def add(analyzer, track):
     lt.addLast(analyzer['tracks'], track)
     for car in analyzer:
         if car!='tracks':
-            update(analyzer[car],track,car)
+            update(analyzer,analyzer[car],track,car)
     return analyzer
-def update(map,track,car):
+def update(analyzer,map,track,car):
     #data hace referencia al valor de la característica, siendo la llave de los mapas
     data = float(track[car])
     entry = om.get(map, data)
@@ -55,21 +55,21 @@ def update(map,track,car):
         lst=lt.newList('ARRAY_LIST')
     else:
         lst = me.getValue(entry)
-    info_track=newDataEntry(track)
+    info_track=newDataEntry(analyzer,track)
     lt.addLast(lst,info_track)
     om.put(map, data, lst)
     return map
 # Funciones para creacion de datos
-def newDataEntry(track):
+def newDataEntry(analyzer,track):
     entry = mp.newMap(numelements=2,maptype='PROBING',loadfactor=1)
-    mp.put(entry,'user_id',track['user_id'])
-    mp.put(entry,'track_id',track['track_id'])
+    for car in analyzer:
+        if car!='tracks':
+            mp.put(entry,car,track[car])
     return entry
 # Funciones de consulta
 def rep_car(analyzer,car,min_value,max_value):
-    arbol=analyzer[car]
     artist=lt.newList('ARRAY_LIST')
-    validas=om.values(arbol,min_value,max_value)
+    validas=om.values(analyzer[car],min_value,max_value)
     reps=0 #suma de tracks validos
     for i in range(1,lt.size(validas)):
         lista_interna=lt.getElement(validas,i)
@@ -77,10 +77,44 @@ def rep_car(analyzer,car,min_value,max_value):
         for x in range(1,lt.size(lista_interna)):
             mapa_interno=lt.getElement(lista_interna,x)
             user=me.getValue(mp.get(mapa_interno,'user_id'))
-            if lt.isPresent(artist,user)==0:
-                lt.addLast(artist,user)
+            unicos(artists,user)
     return reps,lt.size(artist)
+def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
+    canciones=lt.newList('ARRAY_LIST')
+    mapas_canciones=lt.newList('ARRAY_LIST')
+    energy_maps=herramienta_lista(om.values(analyzer['energy'],min_energy,max_energy))
+    dance_maps=herramienta_lista(om.values(analyzer['danceability'],min_danceability,max_danceability))
+    print(lt.firstElement(energy_maps))
+    validas_energy=lista_car(energy_maps,'track_id')
+    validas_dance=lista_car(dance_maps,'track_id')
+    for i in range(1,lt.size(validas_energy)):
+        cancion=lt.getElement(validas_energy,i)
+        if lt.isPresent(validas_dance,cancion)!=0:
+            lt.addLast(canciones,cancion)
+    for i in range(1,lt.size(canciones)):
+        id=lt.getElement(canciones,i)
+        for x in range(1,lt.size(energy_maps)):
+            mapa=lt.getElement(energy_maps,x)
+            if id==me.getValue(mp.get(mapa,'track_id')):
+                lt.addLast(mapas_canciones,mapa)
+    return mapas_canciones
+
 # Funciones utilizadas para comparar elementos dentro de una lista
+def unicos(lista,elemento):
+    if lt.isPresent(lista,elemento)==0:
+        lt.addLast(lista,elemento)
+def herramienta_lista(lista):
+    temp=lt.newList('ARRAY_LIST')
+    for i in range(1,lt.size(lista)):
+        sub=lt.getElement(lista,i)
+        for x in range(1,lt.size(sub)):
+            lt.addLast(temp,lt.getElement(lista,x))
+    return temp
+def lista_car(lista,car):
+    temp=lt.newList('ARRAY_LIST')
+    for i in range(1,lt.size(lista)):
+        lt.addLast(temp,me.getValue(mp.get(lt.getElement(lista,i),car)))
+    return temp
 
 # Funciones de ordenamiento
 def compareIds(id1, id2):
@@ -90,12 +124,12 @@ def compareIds(id1, id2):
         return 1
     else:
         return -1
-
-
 def compare(dato1, dato2):
     #print('dato1:',dato1,'\ndato2:',dato2)
     if (dato1 == dato2):
         return 0
+    elif type(dato1)==dict or type(dato1)==dict:
+        return -1
     elif (dato1 > dato2):
         return 1
     else:
