@@ -61,7 +61,9 @@ def update(analyzer,map,track,car):
     return map
 # Funciones para creacion de datos
 def newDataEntry(analyzer,track):
-    entry = mp.newMap(numelements=2,maptype='PROBING',loadfactor=1)
+    entry = mp.newMap(numelements=20,maptype='PROBING',loadfactor=0.6)
+    mp.put(entry,'track_id',track['track_id'])
+    mp.put(entry,'user_id',track['user_id'])
     for car in analyzer:
         if car!='tracks':
             mp.put(entry,car,track[car])
@@ -108,12 +110,15 @@ def herramienta_lista(lista):
     for i in range(1,lt.size(lista)):
         sub=lt.getElement(lista,i)
         for x in range(1,lt.size(sub)):
-            lt.addLast(temp,lt.getElement(lista,x))
+            mapa=lt.getElement(lista,x)
+            lt.addLast(temp,mapa)
     return temp
 def lista_car(lista,car):
     temp=lt.newList('ARRAY_LIST')
     for i in range(1,lt.size(lista)):
-        lt.addLast(temp,me.getValue(mp.get(lt.getElement(lista,i),car)))
+        mapa_interno=lt.getElement(lista,i)
+        value=me.getValue(mp.get(mapa_interno,car))
+        lt.addLast(temp,value)
     return temp
 
 # Funciones de ordenamiento
