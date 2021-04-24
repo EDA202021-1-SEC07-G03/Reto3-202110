@@ -73,10 +73,10 @@ def rep_car(analyzer,car,min_value,max_value):
     artist=lt.newList('ARRAY_LIST')
     validas=om.values(analyzer[car],min_value,max_value)
     reps=0 #suma de tracks validos
-    for i in range(1,lt.size(validas)):
+    for i in range(1,lt.size(validas)+1):
         lista_interna=lt.getElement(validas,i)
         reps+=lt.size(lista_interna)
-        for x in range(1,lt.size(lista_interna)):
+        for x in range(1,lt.size(lista_interna)+1):
             mapa_interno=lt.getElement(lista_interna,x)
             user=me.getValue(mp.get(mapa_interno,'user_id'))
             unicos(artist,user)
@@ -88,15 +88,18 @@ def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
     dance_maps=herramienta_lista(om.values(analyzer['danceability'],min_danceability,max_danceability))
     validas_energy=lista_car(energy_maps,'track_id')
     validas_dance=lista_car(dance_maps,'track_id')
-    for i in range(1,lt.size(validas_energy)):
+    for i in range(1,lt.size(validas_energy)+1):
         cancion=lt.getElement(validas_energy,i)
-        if lt.isPresent(validas_dance,cancion)!=0:
+        if lt.isPresent(validas_dance,cancion)!=0 and lt.isPresent(canciones,cancion)==0:
             lt.addLast(canciones,cancion)
-    for i in range(1,lt.size(canciones)):
+    for i in range(1,lt.size(canciones)+1):
         id=lt.getElement(canciones,i)
-        for x in range(1,lt.size(energy_maps)):
+        unico=True
+        for x in range(1,lt.size(energy_maps)+1):
             mapa=lt.getElement(energy_maps,x)
-            if id==me.getValue(mp.get(mapa,'track_id')):
+            id_mapa=me.getValue(mp.get(mapa,'track_id'))
+            if id==id_mapa and unico==True:
+                unico=False
                 lt.addLast(mapas_canciones,mapa)
     return mapas_canciones
 
@@ -106,15 +109,15 @@ def unicos(lista,elemento):
         lt.addLast(lista,elemento)
 def herramienta_lista(lista):
     temp=lt.newList('ARRAY_LIST')
-    for i in range(1,lt.size(lista)):
+    for i in range(1,lt.size(lista)+1):
         sub=lt.getElement(lista,i)
-        for x in range(1,lt.size(sub)):
+        for x in range(1,lt.size(sub)+1):
             mapa=lt.getElement(sub,x)
             lt.addLast(temp,mapa)
     return temp
 def lista_car(lista,car):
     temp=lt.newList('ARRAY_LIST')
-    for i in range(1,lt.size(lista)):
+    for i in range(1,lt.size(lista)+1):
         mapa_interno=lt.getElement(lista,i)
         value=me.getValue(mp.get(mapa_interno,car))
         lt.addLast(temp,value)
