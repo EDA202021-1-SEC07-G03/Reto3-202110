@@ -86,7 +86,6 @@ def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
     mapas_canciones=lt.newList('ARRAY_LIST')
     energy_maps=herramienta_lista(om.values(analyzer['energy'],min_energy,max_energy))
     dance_maps=herramienta_lista(om.values(analyzer['danceability'],min_danceability,max_danceability))
-    print(lt.firstElement(energy_maps))
     validas_energy=lista_car(energy_maps,'track_id')
     validas_dance=lista_car(dance_maps,'track_id')
     for i in range(1,lt.size(validas_energy)):
@@ -110,7 +109,7 @@ def herramienta_lista(lista):
     for i in range(1,lt.size(lista)):
         sub=lt.getElement(lista,i)
         for x in range(1,lt.size(sub)):
-            mapa=lt.getElement(lista,x)
+            mapa=lt.getElement(sub,x)
             lt.addLast(temp,mapa)
     return temp
 def lista_car(lista,car):
