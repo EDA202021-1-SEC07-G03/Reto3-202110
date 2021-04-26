@@ -82,8 +82,8 @@ while True:
         print("Tiempo [ms]:",delta_time)
         print("Memoria [kB]:",delta_memory,)
         print('-'*80)
-        #-------------------------------------------------
 
+#**************************************** CARGA *********************************************************************
     elif int(inputs[0]) == 2:
         print("\nCargando información de tracks ....")
         #------------------------------------------------
@@ -116,7 +116,8 @@ while True:
         print("\nTiempo [ms]:",delta_time)
         print("Memoria [kB]:",delta_memory,)
         print('-'*80)
-    
+
+#****************************************REQ 2*********************************************************************
     elif int(inputs[0]) == 3:
         '''
         car=input('Ingrese la característica a consultar: ').lower()
@@ -150,6 +151,9 @@ while True:
         print("\nTiempo [ms]:",delta_time)
         print("Memoria [kB]:",delta_memory,)
         print('-'*80)
+
+#****************************************REQ 2*********************************************************************
+
     elif int(inputs[0]) == 4:
         '''
         min_energy=float(input('Ingrese el valor mínimo para Energy: '))
@@ -182,7 +186,7 @@ while True:
         print('Hay un total de canciones de:',total)
         for i in range(1,lt.size(sub)+1):
             num+=1
-            info=lt.getElement(funcion,i)
+            info=lt.getElement(sub,i)
             track_id=me.getValue(mp.get(info,'track_id'))
             user_id=me.getValue(mp.get(info,'artist_id'))
             energy=me.getValue(mp.get(info,'energy'))
@@ -191,12 +195,15 @@ while True:
         print("\nTiempo [ms]:",delta_time)
         print("Memoria [kB]:",delta_memory,)
         print('-'*80)
+#****************************************REQ 3*********************************************************************
+    elif int(inputs[0]) == 5:
+        None
+
+
+#****************************************REQ 4*********************************************************************
+
     elif int(inputs[0]) == 6:
-        diccionario={'reggae':(60,90),'down-tempo':(70,100),
-             'chill-out':(90,120),'hip-hop':(85,115),
-             'jazz and funk':(120,125),'pop':(100,130),
-             'r&b':(60,80),'rock':(110,140),
-             'metal':(100,160)}
+        
         inputs1=mostrar_opciones()
         if inputs1=='1':
             generos=input('Ingrese la lista de generos separados por ",": ').split(',')
@@ -214,6 +221,8 @@ while True:
             print('='*10,genero.upper(),'='*10)
             print('Para el genero',genero,'el tempo se encuentra entre',float(diccionario[genero][0]),'BPM y',float(diccionario[genero][1]),'BPM')
             print('Reproducciones:',size_tracks,'de',size_artists,'artistas')
+
+#****************************************REQ 5*********************************************************************
 
     else:
         sys.exit(0)

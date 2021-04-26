@@ -101,29 +101,18 @@ def rep_car(analyzer,car,min_value,max_value):
 #****************************************REQ 2*********************************************************************
 def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
     canciones=lt.newList('ARRAY_LIST')
-    mapas_canciones=lt.newList('ARRAY_LIST')
+    ids=lt.newList('ARRAY_LIST')
     energy_maps=herramienta_lista(om.values(analyzer['energy'],min_energy,max_energy))
     valores_dance=om.keys(analyzer['danceability'],min_danceability,max_danceability)
     for i in range(1,lt.size(energy_maps)+1):
         cancion=lt.getElement(energy_maps,i)
+        id=me.getValue(mp.get(cancion,'track_id'))
         valor_dance=float(me.getValue(mp.get(cancion,'danceability')))
-        if lt.isPresent(valores_dance,valor_dance):
-            lt.addLast(canciones,cancion)
-    sub_size=5
-    if lt.size(canciones)<5:
-        sub_size=lt.size(canciones)
-    for i in range(1,sub_size+1):
-        id=lt.getElement(canciones,i)
-        unico=True
-        x=1
-        while x in range(1,lt.size(canciones)+1) and unico==True:
-            mapa=lt.getElement(energy_maps,x)
-            id_mapa=me.getValue(mp.get(mapa,'track_id'))
-            if id==id_mapa:
-                unico=False
-                lt.addLast(mapas_canciones,mapa)
-            x+=1
-    return mapas_canciones,lt.size(canciones)
+        if lt.isPresent(valores_dance,valor_dance) and lt.isPresent(ids,id)==0:
+            lt.addLast(ids,id)
+            if lt.size(canciones)<5:
+                lt.addLast(canciones,cancion)
+    return canciones,lt.size(ids)
 #****************************************REQ 3*********************************************************************
 
 
@@ -157,13 +146,6 @@ def herramienta_lista(lista):
         for x in range(1,lt.size(sub)+1):
             mapa=lt.getElement(sub,x)
             lt.addLast(temp,mapa)
-    return temp
-def lista_car(lista,car):
-    temp=lt.newList('ARRAY_LIST')
-    for i in range(1,lt.size(lista)+1):
-        mapa_interno=lt.getElement(lista,i)
-        value=me.getValue(mp.get(mapa_interno,car))
-        lt.addLast(temp,value)
     return temp
 # Funciones de ordenamiento
 def compare(dato1, dato2):

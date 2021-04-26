@@ -48,14 +48,10 @@ def loadData(analyzer, filename, filename2):
     for line in input_file:
         model.add(analyzer,line,hashtags)
     return analyzer
-# Funciones de ordenamiento
-
 # Funciones de consulta sobre el catálogo
 def rep_car(analyzer,car,min_value,max_value):
     return model.rep_car(analyzer,car,min_value,max_value)
 def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
     return model.festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability)
-
-
 def tracks_por_genero(analyzer,lista_generos,diccionario):
     return model.tracks_por_genero(analyzer,diccionario,lista_generos)
