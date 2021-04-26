@@ -98,7 +98,6 @@ while True:
         tracemalloc.stop()
         delta_time = round(stop_time - start_time,2)
         delta_memory = round(deltaMemory(start_memory, stop_memory),2)
-
         #-------------------------------------------------
         print('Primeros tracks:')
         for i in range(5):
@@ -112,12 +111,11 @@ while True:
         print('Eventos cargados: ' + str(om.size(cont['created_at'])))
         print('Tracks cargados: ' + str(mp.size(cont['info'])))
         print('Artistas cargados: ' + str(mp.size(cont['artists'])))
-        
         print("\nTiempo [ms]:",delta_time)
         print("Memoria [kB]:",delta_memory,)
         print('-'*80)
 
-#****************************************REQ 2*********************************************************************
+#****************************************REQ 1*********************************************************************
     elif int(inputs[0]) == 3:
         '''
         car=input('Ingrese la característica a consultar: ').lower()
@@ -195,6 +193,7 @@ while True:
         print("\nTiempo [ms]:",delta_time)
         print("Memoria [kB]:",delta_memory,)
         print('-'*80)
+
 #****************************************REQ 3*********************************************************************
     elif int(inputs[0]) == 5:
         None
@@ -207,22 +206,40 @@ while True:
         inputs1=mostrar_opciones()
         if inputs1=='1':
             generos=input('Ingrese la lista de generos separados por ",": ').split(',')
-            #reggae,hip-hop,pop
             funcion=controller.tracks_por_genero(cont,generos,diccionario)
+            diccionario={'reggae':(60,90),'down-tempo':(70,100),'chill-out':(90,120),'hip-hop':(85,115),'jazz and funk':(120,125),'pop':(100,130),'r&b':(60,80),'rock':(110,140),'metal':(100,160)}
         while inputs1!='1':
             mostrar_opciones()
             nuevo=input('Ingrese el nombre del nuevo genero: ')
             min_nuevo=input('Ingrese el valor del tempo mínimo: ')
             max_nuevo=input('Ingrese el valor del tempo máximo: ')
             diccionario[nuevo]=(min_nuevo,max_nuevo)
+        #------------------------------------------------
+        tracemalloc.start()
+        start_time = getTime()
+        start_memory = getMemory()
+        #***************************************
         for genero in generos:
             size_tracks=lt.size(me.getValue(mp.get(me.getValue(mp.get(funcion,genero)),'tracks')))
             size_artists=lt.size(me.getValue(mp.get(me.getValue(mp.get(funcion,genero)),'artists')))
             print('='*10,genero.upper(),'='*10)
             print('Para el genero',genero,'el tempo se encuentra entre',float(diccionario[genero][0]),'BPM y',float(diccionario[genero][1]),'BPM')
             print('Reproducciones:',size_tracks,'de',size_artists,'artistas')
+        #**************************************
+        stop_memory = getMemory()
+        stop_time = getTime()
+        tracemalloc.stop()
+        delta_time = round(stop_time - start_time,2)
+        delta_memory = round(deltaMemory(start_memory, stop_memory),2)
+        #-------------------------------------------------
+        print("\nTiempo [ms]:",delta_time)
+        print("Memoria [kB]:",delta_memory,)
+        print('-'*80)
 
 #****************************************REQ 5*********************************************************************
+
+    elif int(inputs[0]) == 7:
+        None
 
     else:
         sys.exit(0)

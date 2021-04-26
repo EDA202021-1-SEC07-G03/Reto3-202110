@@ -55,7 +55,7 @@ def add(analyzer,track,hashtags):
             update(analyzer,analyzer[car],track,car)
     return analyzer
 def update(analyzer,map,track,car):
-    #data hace referencia al valor de la característica, siendo la llave de los mapas
+    '''data hace referencia al valor de la característica, siendo la llave de los mapas'''
     data = float(track[car])
     entry = om.get(map, data)
     if entry is None:
@@ -92,12 +92,15 @@ def rep_car(analyzer,car,min_value,max_value):
     reps=0 #suma de tracks validos
     for i in range(1,lt.size(validas)+1):
         lista_interna=lt.getElement(validas,i)
-        reps+=lt.size(lista_interna)
-        for x in range(1,lt.size(lista_interna)+1):
-            mapa_interno=lt.getElement(lista_interna,x)
-            user=me.getValue(mp.get(mapa_interno,'artist_id'))
-            unicos(artist,user)
+        reps+=lt.size(lista_interna)     
+        lst_artist=artistas_unicos(lista_interna)
+        for x in range(1,lt.size(lst_artist)+1):
+            artist_id=lt.getElement(lst_artist,x)
+            if lt.isPresent(artist,artist_id)==0:
+                lt.addLast(artist,artist_id)
     return reps,lt.size(artist)
+
+    return reps,lt.size(artists)
 #****************************************REQ 2*********************************************************************
 def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
     canciones=lt.newList('ARRAY_LIST')
@@ -130,8 +133,9 @@ def tracks_por_genero(analyzer,diccionario,lista_generos):
     return clasificados
 #****************************************REQ 5*********************************************************************
 
-# Funciones utilizadas para comparar elementos dentro de una lista
+# Funciones copmlementarias
 def artistas_unicos(lista_mapas):
+    '''Se le da una lista con los mapas de los tracks y se retorna una lista con los artistas unicos y sin repeticiones'''
     lista=lt.newList('ARRAY_LIST')
     for x in range(1,lt.size(lista_mapas)+1):
         mapa_interno=lt.getElement(lista_mapas,x)
@@ -149,11 +153,8 @@ def herramienta_lista(lista):
     return temp
 # Funciones de ordenamiento
 def compare(dato1, dato2):
-    #print('dato1:',dato1,'\ndato2:',dato2)
     if (dato1 == dato2):
         return 0
-    elif type(dato1)==dict or type(dato1)==dict:
-        return -1
     elif (dato1 > dato2):
         return 1
     else:

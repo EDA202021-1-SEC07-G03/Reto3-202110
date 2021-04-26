@@ -55,3 +55,13 @@ def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
     return model.festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability)
 def tracks_por_genero(analyzer,lista_generos,diccionario):
     return model.tracks_por_genero(analyzer,diccionario,lista_generos)
+'''#Funciones complementarias
+def crear_diccionario(nuevo):
+    temp=mp.newMap(maptype='PROBING')
+    diccionario={'reggae':(60,90),'down-tempo':(70,100),'chill-out':(90,120),'hip-hop':(85,115),'jazz and funk':(120,125),'pop':(100,130),'r&b':(60,80),'rock':(110,140),'metal':(100,160)}
+    for genero in diccionario:
+        mapa_genero=mp.newMap(5,maptype='PROBING')
+        mp.put('minimo',diccionario[genero][0])
+        mp.put('maximo',diccionario[genero][1])
+        mp.put(temp,mapa_genero)
+    if nuevo!={}:'''
