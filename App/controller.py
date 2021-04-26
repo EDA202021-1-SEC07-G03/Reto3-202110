@@ -42,8 +42,8 @@ def init():
 def loadData(analyzer, filename, filename2):
     filename = cf.data_dir + filename
     input_file = csv.DictReader(open(filename, encoding="utf-8"),delimiter=",")
-    filename2 = cf.data_dir + filename
-    input_file2 = csv.DictReader(open(filename, encoding="utf-8"),delimiter=",")
+    filename2 = cf.data_dir + filename2
+    input_file2 = csv.DictReader(open(filename2, encoding="utf-8"),delimiter=",")
     hashtags=model.hashtags(input_file2)
     for line in input_file:
         model.add(analyzer,line,hashtags)
@@ -58,21 +58,4 @@ def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
 
 
 def tracks_por_genero(analyzer,lista_generos,diccionario):
-    return model.tracks_por_genero(lista_generos,diccionario)
-
-
-def contador(analyzer):
-    return mp.size(analyzer['tracks']),mp.size(analyzer['info']),mp.size(analyzer['artists'])
-
-'''
-user="user_track_hashtag_timestamp-small.csv"
-user= cf.data_dir + user
-input_file2 = csv.DictReader(open(user, encoding="utf-8"),delimiter=",")
-lst=[]
-for hashtag in input_file2:
-    lst+=[hashtag["hashtag"]]
-i=0
-for track in input_file:
-    track["hashtag"]=lst[i]
-    model.addTrack(analyzer, track)
-    i+=1'''
+    return model.tracks_por_genero(analyzer,diccionario,lista_generos)

@@ -34,7 +34,7 @@ import datetime
 assert config
 # Construccion de modelos
 def newAnalyzer():
-    analyzer = {'artists':None,'info':None,'tracks':None,'instrumentalness':None,'acousticness':None,'liveness':None,'speechiness':None,'energy':None,'danceability':None,'valence':None,'tempo':None}
+    analyzer = {'artists':None,'info':None,'tracks':None,'created_at':None,'instrumentalness':None,'acousticness':None,'liveness':None,'speechiness':None,'energy':None,'danceability':None,'valence':None,'tempo':None}
     analyzer['info']=mp.newMap(130000,maptype='PROBING')
     analyzer['tracks'] = lt.newList('SINGLE_LINKED')
     analyzer['artists'] = lt.newList('SINGLE_LINKED')
@@ -74,11 +74,13 @@ def create_map(analyzer,track,hashtags):
     temp=mp.newMap(maptype='PROBING')
     mp.put(temp,'track_id',track['track_id'])
     mp.put(temp,'artist_id',track['artist_id'])
-    mp.put(temp,'created_at',track['created_at'])
     mp.put(temp,'hashtag',me.getValue(mp.get(hashtags,track['track_id'])))
     for car in analyzer:
         if car!='tracks' and car!='info'and car!='artists':
-            mp.put(temp,car,track[car])
+            value=track[car]
+            if car=='created_at':
+                value=''.join(value[-8:].split(':'))
+            mp.put(temp,car,value)
     return temp
 def newDataEntry(analyzer,track):
     entry= me.getValue(mp.get(analyzer['info'],track['track_id']))
@@ -115,19 +117,26 @@ def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
 
 #****************************************REQ 4*********************************************************************
 def tracks_por_genero(analyzer,diccionario,lista_generos):
-    clasificados=lt.newList('ARRAY_LIST')
+    clasificados=mp.newMap(numelements=20,maptype='PROBING',loadfactor=0.5)
     for genero in lista_generos:
-        tracks=validos_por_genero(genero,diccionario[genero][0],diccionario[genero][1],analyzer['tempo'])
-        mapa=mp.newMap(numelements=1000,maptype='PROBING',loadfactor=0.5)
-        mp.put(mapa,genero,tracks)
-        lt.addLast(mapa)
+        info=mp.newMap(5)
+        tracks=herramienta_lista(om.values(analyzer['tempo'],diccionario[genero][0],diccionario[genero][1]))
+        artistas=artistas_unicos(tracks)
+        mp.put(info,'tracks',tracks)
+        mp.put(info,'artists',artistas)
+        mp.put(clasificados,genero,info)
     return clasificados
 #****************************************REQ 5*********************************************************************
 
 # Funciones utilizadas para comparar elementos dentro de una lista
-def unicos(lista,elemento):
-    if lt.isPresent(lista,elemento)==0:
-        lt.addLast(lista,elemento)
+def artistas_unicos(lista_mapas):
+    lista=lt.newList('ARRAY_LIST')
+    for x in range(1,lt.size(lista_mapas)+1):
+        mapa_interno=lt.getElement(lista_interna,x)
+        user=me.getValue(mp.get(mapa_interno,'artist_id'))
+        if lt.isPresent(lista,elemento)==0:
+            lt.addLast(lista,elemento)
+    return lista
 def herramienta_lista(lista):
     temp=lt.newList('ARRAY_LIST')
     for i in range(1,lt.size(lista)+1):
@@ -143,17 +152,10 @@ def lista_car(lista,car):
         value=me.getValue(mp.get(mapa_interno,car))
         lt.addLast(temp,value)
     return temp
-def validos_por_genero(genero,min_tempo,max_tempo,tempo):#tempo sería analyzer[tempo]
+def validos_por_genero(min_tempo,max_tempo,tempo):#tempo sería analyzer[tempo]
     lista_listas=om.values(tempo,min_tempo,max_tempo)
     return herramienta_lista(lista_listas)
 # Funciones de ordenamiento
-def compareIds(id1, id2):
-    if (id1 == id2):
-        return 0
-    elif id1 > id2:
-        return 1
-    else:
-        return -1
 def compare(dato1, dato2):
     #print('dato1:',dato1,'\ndato2:',dato2)
     if (dato1 == dato2):

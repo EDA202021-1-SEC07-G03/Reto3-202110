@@ -30,7 +30,10 @@ from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import map as mp
 import datetime
+import time
+import tracemalloc
 filename='context_content_features-small.csv'
+filename2='user_track_hashtag_timestamp-small.csv'
 cont=None
 def printMenu():
     print("Bienvenido")
@@ -44,6 +47,17 @@ def printMenu():
 def mostrar_opciones():
     print('1-Consultar lista de generos\n2-Crear nuevo genero')
     return input('Ingrese la accion a realizar: ')
+def getTime():
+    return float(time.perf_counter()*1000)
+def getMemory():
+    return tracemalloc.take_snapshot()
+def deltaMemory(start_memory, stop_memory):
+    memory_diff = stop_memory.compare_to(start_memory, "filename")
+    delta_memory = 0.0
+    for stat in memory_diff:
+        delta_memory = delta_memory + stat.size_diff
+    delta_memory = delta_memory/1024.0
+    return delta_memory
 cont = None
 """
 Menu principal
@@ -53,18 +67,49 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
+        #------------------------------------------------
+        tracemalloc.start()
+        start_time = getTime()
+        start_memory = getMemory()
+        #***************************************
         cont = controller.init()
+        #**************************************
+        stop_memory = getMemory()
+        stop_time = getTime()
+        tracemalloc.stop()
+        delta_time = round(stop_time - start_time,2)
+        delta_memory = round(deltaMemory(start_memory, stop_memory),2)
+        print("Tiempo [ms]:",delta_time)
+        print("Memoria [kB]:",delta_memory,)
+        print('-'*80)
+        #-------------------------------------------------
 
     elif int(inputs[0]) == 2:
         print("\nCargando información de tracks ....")
-        controller.loadData(cont, filename)
-        print('Eventos cargados: ' + str(controller.contador(cont)[0]))
-        print('Tracks cargados: ' + str(controller.contador(cont)[1]))
-        print('Artistas cargados: ' + str(controller.contador(cont)[2]))
+        #------------------------------------------------
+        tracemalloc.start()
+        start_time = getTime()
+        start_memory = getMemory()
+        #***************************************
+        controller.loadData(cont,filename,filename2)
+        #**************************************
+        stop_memory = getMemory()
+        stop_time = getTime()
+        tracemalloc.stop()
+        delta_time = round(stop_time - start_time,2)
+        delta_memory = round(deltaMemory(start_memory, stop_memory),2)
+
+        #-------------------------------------------------
+        print('Eventos cargados: ' + str(om.size(cont['created_at'])))
+        print('Tracks cargados: ' + str(mp.size(cont['info'])))
+        print('Artistas cargados: ' + str(mp.size(cont['artists'])))
         '''
         print('Altura del arbol: ' + str(controller.indexHeight(cont)))
         print('Elementos en el arbol: ' + str(controller.indexSize(cont)))
-        '''
+        '''        
+        print("\nTiempo [ms]:",delta_time)
+        print("Memoria [kB]:",delta_memory,)
+        print('-'*80)
     
     elif int(inputs[0]) == 3:
         '''
@@ -77,15 +122,28 @@ while True:
         car='instrumentalness'
         min_value=float(0.75)
         max_value=float(1)
-        
+        #------------------------------------------------
+        tracemalloc.start()
+        start_time = getTime()
+        start_memory = getMemory()
+        #***************************************
         funcion=controller.rep_car(cont,car,min_value,max_value)
+        #**************************************
+        stop_memory = getMemory()
+        stop_time = getTime()
+        tracemalloc.stop()
+        delta_time = round(stop_time - start_time,2)
+        delta_memory = round(deltaMemory(start_memory, stop_memory),2)
+        #-------------------------------------------------
         reps=funcion[0]
         artistas=funcion[1]
         print('*'*60)
         print('La característica',car,'está en el rango de',min_value,'a',max_value)
         print('Reproducciones:',reps)
         print('Artistas:',artistas)
-        print('*'*60)
+        print("\nTiempo [ms]:",delta_time)
+        print("Memoria [kB]:",delta_memory,)
+        print('-'*80)
     elif int(inputs[0]) == 4:
         '''
         min_energy=float(input('Ingrese el valor mínimo para Energy: '))
@@ -97,8 +155,21 @@ while True:
         max_energy=float(0.75)
         min_danceability=float(0.75)
         max_danceability=float(1)
-        
+        #------------------------------------------------
+        tracemalloc.start()
+        start_time = getTime()
+        start_memory = getMemory()
+        #***************************************
         funcion=controller.festejar(cont,min_energy,max_energy,min_danceability,max_danceability)
+        #**************************************
+        stop_memory = getMemory()
+        stop_time = getTime()
+        tracemalloc.stop()
+        delta_time = round(stop_time - start_time,2)
+        delta_memory = round(deltaMemory(start_memory, stop_memory),2)
+        
+        #-------------------------------------------------
+        
         total=lt.size(funcion)
         size=5
         if total<5:
@@ -114,6 +185,9 @@ while True:
             energy=me.getValue(mp.get(info,'energy'))
             dance=me.getValue(mp.get(info,'danceability'))
             print('Track',num,':',track_id,'con energia de',energy,'y danceability de',dance)
+        print("\nTiempo [ms]:",delta_time)
+        print("Memoria [kB]:",delta_memory,)
+        print('-'*80)
     elif int(inputs[0]) == 6:
         diccionario={'reggae':(60,90),'down-tempo':(70,100),
              'chill-out':(90,120),'hip-hop':(85,115),
@@ -123,21 +197,23 @@ while True:
         inputs1=mostrar_opciones()
         if inputs1=='1':
             generos=input('Ingrese la lista de generos separados por ",": ').split(',')
-            #'reggae,hip-hop,pop'
-            funcion=controller.tracks_por_genero(cont,generos)
+            #reggae,hip-hop,pop
+            funcion=controller.tracks_por_genero(cont,generos,diccionario)
         while inputs1!='1':
             mostrar_opciones()
             nuevo=input('Ingrese el nombre del nuevo genero: ')
             min_nuevo=input('Ingrese el valor del tempo mínimo: ')
             max_nuevo=input('Ingrese el valor del tempo máximo: ')
             diccionario[nuevo]=(min_nuevo,max_nuevo)
-        for i in range(1,lt.size(funcion)+1):
-            mapa_genero=lt.getElement(funcion,i)
-            genero=lt.firstElement(mp.keySet(mapa_genero))
-            lista_tracks=me.getValue(mp.get(mapa_genero,genero))
-            size=lt.size(lista_tracks)
+        for genero in generos:
+            lista_tracks=me.getValue(mp.get(me.getValue(mp.get(funcion,genero)),'tracks'))
+            lista_artistas=me.getValue(mp.get(me.getValue(mp.get(funcion,genero)),'artists'))
+            size_tracks=lt.size(lista_tracks)
+            size_artists=lt.size(lista_artistas)
             print('='*10,genero.upper(),'='*10)
-            print(size)
+            print('Para el genero',genero,'el tempo se encuentra entre',diccionario[genero][0],'y',diccionario[genero][1])
+            print('Reproducciones encontradas:',size_tracks)
+            print('Artistas encontrados:',size_artists)
 
     else:
         sys.exit(0)
