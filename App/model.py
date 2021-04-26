@@ -103,12 +103,11 @@ def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
     canciones=lt.newList('ARRAY_LIST')
     mapas_canciones=lt.newList('ARRAY_LIST')
     energy_maps=herramienta_lista(om.values(analyzer['energy'],min_energy,max_energy))
-    dance_maps=herramienta_lista(om.values(analyzer['danceability'],min_danceability,max_danceability))
-    validas_energy=lista_car(energy_maps,'track_id')
-    validas_dance=lista_car(dance_maps,'track_id')
-    for i in range(1,lt.size(validas_energy)+1):
-        cancion=lt.getElement(validas_energy,i)
-        if lt.isPresent(validas_dance,cancion)!=0 and lt.isPresent(canciones,cancion)==0:
+    valores_dance=om.keys(analyzer['danceability'],min_danceability,max_danceability)
+    for i in range(1,lt.size(energy_maps)+1):
+        cancion=lt.getElement(energy_maps,i)
+        valor_dance=float(me.getValue(mp.get(cancion,'danceability')))
+        if lt.isPresent(valores_dance,valor_dance):
             lt.addLast(canciones,cancion)
     sub_size=5
     if lt.size(canciones)<5:
@@ -120,9 +119,10 @@ def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
         while x in range(1,lt.size(canciones)+1) and unico==True:
             mapa=lt.getElement(energy_maps,x)
             id_mapa=me.getValue(mp.get(mapa,'track_id'))
-            if id==id_mapa and unico==True:
+            if id==id_mapa:
                 unico=False
                 lt.addLast(mapas_canciones,mapa)
+            x+=1
     return mapas_canciones,lt.size(canciones)
 #****************************************REQ 3*********************************************************************
 

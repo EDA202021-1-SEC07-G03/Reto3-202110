@@ -100,13 +100,19 @@ while True:
         delta_memory = round(deltaMemory(start_memory, stop_memory),2)
 
         #-------------------------------------------------
+        print('Primeros tracks:')
+        for i in range(5):
+            cancion=lt.getElement(cont['tracks'],i)
+            print('\nTrack',i,cancion)
+        print('\nUltimos tracks:')
+        for i in range(5):
+            x=lt.size(cont['tracks'])-i
+            cancion=cancion=lt.getElement(cont['tracks'],x)
+            print('\nTrack',x,cancion)
         print('Eventos cargados: ' + str(om.size(cont['created_at'])))
         print('Tracks cargados: ' + str(mp.size(cont['info'])))
         print('Artistas cargados: ' + str(mp.size(cont['artists'])))
-        '''
-        print('Altura del arbol: ' + str(controller.indexHeight(cont)))
-        print('Elementos en el arbol: ' + str(controller.indexSize(cont)))
-        '''        
+        
         print("\nTiempo [ms]:",delta_time)
         print("Memoria [kB]:",delta_memory,)
         print('-'*80)
