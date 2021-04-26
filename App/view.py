@@ -41,7 +41,10 @@ def printMenu():
     print("5- Encontrar musica para estudiar")
     print("6- Estudiar los generos musicales")
     print("7- Genero musical mas escuchado en el tiempo")
-catalog = None
+def mostrar_opciones():
+    print('1-Consultar lista de generos\n2-Crear nuevo genero')
+    return input('Ingrese la accion a realizar: ')
+cont = None
 """
 Menu principal
 """
@@ -55,7 +58,9 @@ while True:
     elif int(inputs[0]) == 2:
         print("\nCargando información de tracks ....")
         controller.loadData(cont, filename)
-        print('Tracks cargados: ' + str(controller.contador_tracks(cont)))
+        print('Eventos cargados: ' + str(controller.contador(cont)[0]))
+        print('Tracks cargados: ' + str(controller.contador(cont)[1]))
+        print('Artistas cargados: ' + str(controller.contador(cont)[2]))
         '''
         print('Altura del arbol: ' + str(controller.indexHeight(cont)))
         print('Elementos en el arbol: ' + str(controller.indexSize(cont)))
@@ -115,20 +120,24 @@ while True:
              'jazz and funk':(120,125),'pop':(100,130),
              'r&b':(60,80),'rock':(110,140),
              'metal':(100,160)}
-        def mostrar_opciones()
-            print('1-Consultar lista de generos\n2-Crear nuevo genero')
-            inputs1=input('Ingrese la accion a realizar: ')
-        mostrar_opciones()
+        inputs1=mostrar_opciones()
         if inputs1=='1':
-            generos=input('Ingrese la lista de generos: ')
-            funcion=controller.validos_por_genero(generos,diccionario)
+            generos=input('Ingrese la lista de generos separados por ",": ').split(',')
+            #'reggae,hip-hop,pop'
+            funcion=controller.tracks_por_genero(cont,generos)
         while inputs1!='1':
             mostrar_opciones()
             nuevo=input('Ingrese el nombre del nuevo genero: ')
             min_nuevo=input('Ingrese el valor del tempo mínimo: ')
             max_nuevo=input('Ingrese el valor del tempo máximo: ')
             diccionario[nuevo]=(min_nuevo,max_nuevo)
-        
+        for i in range(1,lt.size(funcion)+1):
+            mapa_genero=lt.getElement(funcion,i)
+            genero=lt.firstElement(mp.keySet(mapa_genero))
+            lista_tracks=me.getValue(mp.get(mapa_genero,genero))
+            size=lt.size(lista_tracks)
+            print('='*10,genero.upper(),'='*10)
+            print(size)
 
     else:
         sys.exit(0)

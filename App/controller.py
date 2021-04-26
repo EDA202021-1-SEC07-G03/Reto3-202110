@@ -54,12 +54,13 @@ def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
     return model.festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability)
 
 
-def validos_por_genero(lista_generos,diccionario):
-    return model.validos_por_genero(lista_generos,diccionario)
+def tracks_por_genero(analyzer,lista_generos,diccionario):
+    return model.tracks_por_genero(lista_generos,diccionario)
 
 
-def contador_tracks(analyzer):
-    return lt.size(analyzer['tracks'])
+def contador(analyzer):
+    return mp.size(analyzer['tracks']),mp.size(analyzer['info']),mp.size(analyzer['artists'])
+
 '''
 user="user_track_hashtag_timestamp-small.csv"
 user= cf.data_dir + user

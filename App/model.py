@@ -34,17 +34,22 @@ import datetime
 assert config
 # Construccion de modelos
 def newAnalyzer():
-    analyzer = {'tracks':None,'instrumentalness':None,'acousticness':None,'liveness':None,'speechiness':None,'energy':None,'danceability':None,'valence':None,'tempo':None}
-    analyzer['tracks'] = lt.newList('SINGLE_LINKED', compareIds)
+    analyzer = {'artists':None,'info':None,'tracks':None,'instrumentalness':None,'acousticness':None,'liveness':None,'speechiness':None,'energy':None,'danceability':None,'valence':None,'tempo':None}
+    analyzer['info']=mp.newMap(130000,maptype='PROBING')
+    analyzer['tracks'] = lt.newList('SINGLE_LINKED')
+    analyzer['artists'] = lt.newList('SINGLE_LINKED')
     for car in analyzer:
-        if car!='tracks':
+        if car!='tracks' and car!='info'and car!='artists':
             analyzer[car] = om.newMap(omaptype='RBT',comparefunction=compare)
     return analyzer
 # Funciones para agregar informacion al catalogo
 def add(analyzer, track):
-    lt.addLast(analyzer['tracks'], track)
+    lt.addLast(analyzer['tracks'],track)
+    if lt.isPresent(analyzer['artists'],track['artist_id'])==0:
+        lt.addLast(analyzer['artists'],track['artist_id'])
+    mp.put(analyzer['info'],track['track_id'],create_map(analyzer,track))
     for car in analyzer:
-        if car!='tracks':
+        if car!='tracks' and car!='info'and car!='artists':
             update(analyzer,analyzer[car],track,car)
     return analyzer
 def update(analyzer,map,track,car):
@@ -60,13 +65,16 @@ def update(analyzer,map,track,car):
     om.put(map, data, lst)
     return map
 # Funciones para creacion de datos
-def newDataEntry(analyzer,track):
-    entry = mp.newMap(numelements=20,maptype='PROBING',loadfactor=0.6)
-    mp.put(entry,'track_id',track['track_id'])
-    mp.put(entry,'user_id',track['user_id'])
+def create_map(analyzer,track):
+    temp=mp.newMap(maptype='PROBING')
+    mp.put(temp,'track_id',track['track_id'])
+    mp.put(temp,'artist_id',track['artist_id'])
     for car in analyzer:
-        if car!='tracks':
-            mp.put(entry,car,track[car])
+        if car!='tracks' and car!='info'and car!='artists':
+            mp.put(temp,car,track[car])
+    return temp
+def newDataEntry(analyzer,track):
+    entry= me.getValue(mp.get(analyzer['info'],track['track_id']))
     return entry
 # Funciones de consulta
 def rep_car(analyzer,car,min_value,max_value):
@@ -78,7 +86,7 @@ def rep_car(analyzer,car,min_value,max_value):
         reps+=lt.size(lista_interna)
         for x in range(1,lt.size(lista_interna)+1):
             mapa_interno=lt.getElement(lista_interna,x)
-            user=me.getValue(mp.get(mapa_interno,'user_id'))
+            user=me.getValue(mp.get(mapa_interno,'artist_id'))
             unicos(artist,user)
     return reps,lt.size(artist)
 def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
@@ -106,12 +114,11 @@ def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
 
 
 
-def generos(diccionario,lista_generos):
-    tempo=analyzer['tempo']
+def tracks_por_genero(analyzer,diccionario,lista_generos):
     clasificados=lt.newList('ARRAY_LIST')
     for genero in lista_generos:
-        tracks=validos_por_genero(genero,diccionario[genero][0],diccionario[genero][1],tempo)
-        mapa=mp.newMap(maptype='PROBING')
+        tracks=validos_por_genero(genero,diccionario[genero][0],diccionario[genero][1],analyzer['tempo'])
+        mapa=mp.newMap(numelements=1000,maptype='PROBING',loadfactor=0.5)
         mp.put(mapa,genero,tracks)
         lt.addLast(mapa)
     return clasificados
