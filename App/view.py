@@ -206,14 +206,11 @@ while True:
             max_nuevo=input('Ingrese el valor del tempo máximo: ')
             diccionario[nuevo]=(min_nuevo,max_nuevo)
         for genero in generos:
-            lista_tracks=me.getValue(mp.get(me.getValue(mp.get(funcion,genero)),'tracks'))
-            lista_artistas=me.getValue(mp.get(me.getValue(mp.get(funcion,genero)),'artists'))
-            size_tracks=lt.size(lista_tracks)
-            size_artists=lt.size(lista_artistas)
+            size_tracks=lt.size(me.getValue(mp.get(me.getValue(mp.get(funcion,genero)),'tracks')))
+            size_artists=lt.size(me.getValue(mp.get(me.getValue(mp.get(funcion,genero)),'artists')))
             print('='*10,genero.upper(),'='*10)
-            print('Para el genero',genero,'el tempo se encuentra entre',diccionario[genero][0],'y',diccionario[genero][1])
-            print('Reproducciones encontradas:',size_tracks)
-            print('Artistas encontrados:',size_artists)
+            print('Para el genero',genero,'el tempo se encuentra entre',float(diccionario[genero][0]),'BPM y',float(diccionario[genero][1]),'BPM')
+            print('Reproducciones:',size_tracks,'de',size_artists,'artistas')
 
     else:
         sys.exit(0)
