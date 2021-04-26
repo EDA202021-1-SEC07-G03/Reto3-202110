@@ -110,16 +110,20 @@ def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
         cancion=lt.getElement(validas_energy,i)
         if lt.isPresent(validas_dance,cancion)!=0 and lt.isPresent(canciones,cancion)==0:
             lt.addLast(canciones,cancion)
-    for i in range(1,lt.size(canciones)+1):
+    sub_size=5
+    if lt.size(canciones)<5:
+        sub_size=lt.size(canciones)
+    for i in range(1,sub_size+1):
         id=lt.getElement(canciones,i)
         unico=True
-        for x in range(1,lt.size(energy_maps)+1):
+        x=1
+        while x in range(1,lt.size(canciones)+1) and unico==True:
             mapa=lt.getElement(energy_maps,x)
             id_mapa=me.getValue(mp.get(mapa,'track_id'))
             if id==id_mapa and unico==True:
                 unico=False
                 lt.addLast(mapas_canciones,mapa)
-    return mapas_canciones
+    return mapas_canciones,lt.size(canciones)
 #****************************************REQ 3*********************************************************************
 
 

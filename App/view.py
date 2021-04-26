@@ -170,11 +170,8 @@ while True:
         
         #-------------------------------------------------
         
-        total=lt.size(funcion)
-        size=5
-        if total<5:
-            size=total
-        sub=lt.subList(funcion,0,size)
+        total=funcion[1]
+        sub=funcion[0]
         num=0
         print('Hay un total de canciones de:',total)
         for i in range(1,lt.size(sub)+1):
