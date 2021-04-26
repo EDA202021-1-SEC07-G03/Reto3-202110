@@ -43,11 +43,11 @@ def newAnalyzer():
             analyzer[car] = om.newMap(omaptype='RBT',comparefunction=compare)
     return analyzer
 # Funciones para agregar informacion al catalogo
-def add(analyzer, track):
+def add(analyzer,track,hashtags):
     lt.addLast(analyzer['tracks'],track)
     if lt.isPresent(analyzer['artists'],track['artist_id'])==0:
         lt.addLast(analyzer['artists'],track['artist_id'])
-    mp.put(analyzer['info'],track['track_id'],create_map(analyzer,track))
+    mp.put(analyzer['info'],track['track_id'],create_map(analyzer,track,hashtags))
     for car in analyzer:
         if car!='tracks' and car!='info'and car!='artists':
             update(analyzer,analyzer[car],track,car)
@@ -65,10 +65,17 @@ def update(analyzer,map,track,car):
     om.put(map, data, lst)
     return map
 # Funciones para creacion de datos
-def create_map(analyzer,track):
+def hashtags(file):
+    temp=mp.newMap(180000,maptype='PROBING')
+    for line in file:
+        mp.put(temp,line['track_id'],line['hashtag'])
+    return temp
+def create_map(analyzer,track,hashtags):
     temp=mp.newMap(maptype='PROBING')
     mp.put(temp,'track_id',track['track_id'])
     mp.put(temp,'artist_id',track['artist_id'])
+    mp.put(temp,'created_at',track['created_at'])
+    mp.put(temp,'hashtag',me.getValue(mp.get(hashtags,track['track_id'])))
     for car in analyzer:
         if car!='tracks' and car!='info'and car!='artists':
             mp.put(temp,car,track[car])
@@ -77,6 +84,7 @@ def newDataEntry(analyzer,track):
     entry= me.getValue(mp.get(analyzer['info'],track['track_id']))
     return entry
 # Funciones de consulta
+#****************************************REQ 1*********************************************************************
 def rep_car(analyzer,car,min_value,max_value):
     artist=lt.newList('ARRAY_LIST')
     validas=om.values(analyzer[car],min_value,max_value)
@@ -89,31 +97,23 @@ def rep_car(analyzer,car,min_value,max_value):
             user=me.getValue(mp.get(mapa_interno,'artist_id'))
             unicos(artist,user)
     return reps,lt.size(artist)
+#****************************************REQ 2*********************************************************************
 def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
-    canciones=lt.newList('ARRAY_LIST')
     mapas_canciones=lt.newList('ARRAY_LIST')
     energy_maps=herramienta_lista(om.values(analyzer['energy'],min_energy,max_energy))
     dance_maps=herramienta_lista(om.values(analyzer['danceability'],min_danceability,max_danceability))
     validas_energy=lista_car(energy_maps,'track_id')
     validas_dance=lista_car(dance_maps,'track_id')
-    for i in range(1,lt.size(validas_energy)+1):
-        cancion=lt.getElement(validas_energy,i)
-        if lt.isPresent(validas_dance,cancion)!=0 and lt.isPresent(canciones,cancion)==0:
+    for i in range(1,lt.size(energy_maps)+1):
+        cancion=lt.getElement(energy_maps,i)
+        if me.getValue(mp.get(cancion,'danceability'))in range(min_danceability,max_danceability+0.00001):
             lt.addLast(canciones,cancion)
-    for i in range(1,lt.size(canciones)+1):
-        id=lt.getElement(canciones,i)
-        unico=True
-        for x in range(1,lt.size(energy_maps)+1):
-            mapa=lt.getElement(energy_maps,x)
-            id_mapa=me.getValue(mp.get(mapa,'track_id'))
-            if id==id_mapa and unico==True:
-                unico=False
-                lt.addLast(mapas_canciones,mapa)
     return mapas_canciones
+#****************************************REQ 3*********************************************************************
 
 
 
-
+#****************************************REQ 4*********************************************************************
 def tracks_por_genero(analyzer,diccionario,lista_generos):
     clasificados=lt.newList('ARRAY_LIST')
     for genero in lista_generos:
@@ -122,6 +122,8 @@ def tracks_por_genero(analyzer,diccionario,lista_generos):
         mp.put(mapa,genero,tracks)
         lt.addLast(mapa)
     return clasificados
+#****************************************REQ 5*********************************************************************
+
 # Funciones utilizadas para comparar elementos dentro de una lista
 def unicos(lista,elemento):
     if lt.isPresent(lista,elemento)==0:

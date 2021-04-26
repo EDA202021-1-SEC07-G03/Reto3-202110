@@ -39,11 +39,14 @@ def init():
     analyzer = model.newAnalyzer()
     return analyzer
 # Funciones para la carga de datos
-def loadData(analyzer, filename):
+def loadData(analyzer, filename, filename2):
     filename = cf.data_dir + filename
     input_file = csv.DictReader(open(filename, encoding="utf-8"),delimiter=",")
+    filename2 = cf.data_dir + filename
+    input_file2 = csv.DictReader(open(filename, encoding="utf-8"),delimiter=",")
+    hashtags=model.hashtags(input_file2)
     for line in input_file:
-        model.add(analyzer, line)
+        model.add(analyzer,line,hashtags)
     return analyzer
 # Funciones de ordenamiento
 

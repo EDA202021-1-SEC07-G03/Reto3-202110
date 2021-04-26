@@ -110,7 +110,7 @@ while True:
             num+=1
             info=lt.getElement(funcion,i)
             track_id=me.getValue(mp.get(info,'track_id'))
-            user_id=me.getValue(mp.get(info,'user_id'))
+            user_id=me.getValue(mp.get(info,'artist_id'))
             energy=me.getValue(mp.get(info,'energy'))
             dance=me.getValue(mp.get(info,'danceability'))
             print('Track',num,':',track_id,'con energia de',energy,'y danceability de',dance)
