@@ -52,5 +52,23 @@ def rep_car(analyzer,car,min_value,max_value):
     return model.rep_car(analyzer,car,min_value,max_value)
 def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
     return model.festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability)
+
+
+def validos_por_genero(lista_generos,diccionario):
+    return model.validos_por_genero(lista_generos,diccionario)
+
+
 def contador_tracks(analyzer):
     return lt.size(analyzer['tracks'])
+'''
+user="user_track_hashtag_timestamp-small.csv"
+user= cf.data_dir + user
+input_file2 = csv.DictReader(open(user, encoding="utf-8"),delimiter=",")
+lst=[]
+for hashtag in input_file2:
+    lst+=[hashtag["hashtag"]]
+i=0
+for track in input_file:
+    track["hashtag"]=lst[i]
+    model.addTrack(analyzer, track)
+    i+=1'''

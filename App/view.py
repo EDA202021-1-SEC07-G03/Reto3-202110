@@ -109,6 +109,26 @@ while True:
             energy=me.getValue(mp.get(info,'energy'))
             dance=me.getValue(mp.get(info,'danceability'))
             print('Track',num,':',track_id,'con energia de',energy,'y danceability de',dance)
+    elif int(inputs[0]) == 6:
+        diccionario={'reggae':(60,90),'down-tempo':(70,100),
+             'chill-out':(90,120),'hip-hop':(85,115),
+             'jazz and funk':(120,125),'pop':(100,130),
+             'r&b':(60,80),'rock':(110,140),
+             'metal':(100,160)}
+        def mostrar_opciones()
+            print('1-Consultar lista de generos\n2-Crear nuevo genero')
+            inputs1=input('Ingrese la accion a realizar: ')
+        mostrar_opciones()
+        if inputs1=='1':
+            generos=input('Ingrese la lista de generos: ')
+            funcion=controller.validos_por_genero(generos,diccionario)
+        while inputs1!='1':
+            mostrar_opciones()
+            nuevo=input('Ingrese el nombre del nuevo genero: ')
+            min_nuevo=input('Ingrese el valor del tempo mínimo: ')
+            max_nuevo=input('Ingrese el valor del tempo máximo: ')
+            diccionario[nuevo]=(min_nuevo,max_nuevo)
+        
 
     else:
         sys.exit(0)

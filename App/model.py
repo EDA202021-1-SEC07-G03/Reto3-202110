@@ -34,7 +34,7 @@ import datetime
 assert config
 # Construccion de modelos
 def newAnalyzer():
-    analyzer = {'tracks':None,'instrumentalness':None,'acousticness':None,'liveness':None,'speechiness':None,'energy':None,'danceability':None,'valence':None}
+    analyzer = {'tracks':None,'instrumentalness':None,'acousticness':None,'liveness':None,'speechiness':None,'energy':None,'danceability':None,'valence':None,'tempo':None}
     analyzer['tracks'] = lt.newList('SINGLE_LINKED', compareIds)
     for car in analyzer:
         if car!='tracks':
@@ -103,6 +103,18 @@ def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
                 lt.addLast(mapas_canciones,mapa)
     return mapas_canciones
 
+
+
+
+def generos(diccionario,lista_generos):
+    tempo=analyzer['tempo']
+    clasificados=lt.newList('ARRAY_LIST')
+    for genero in lista_generos:
+        tracks=validos_por_genero(genero,diccionario[genero][0],diccionario[genero][1],tempo)
+        mapa=mp.newMap(maptype='PROBING')
+        mp.put(mapa,genero,tracks)
+        lt.addLast(mapa)
+    return clasificados
 # Funciones utilizadas para comparar elementos dentro de una lista
 def unicos(lista,elemento):
     if lt.isPresent(lista,elemento)==0:
@@ -122,7 +134,9 @@ def lista_car(lista,car):
         value=me.getValue(mp.get(mapa_interno,car))
         lt.addLast(temp,value)
     return temp
-
+def validos_por_genero(genero,min_tempo,max_tempo,tempo):#tempo sería analyzer[tempo]
+    lista_listas=om.values(tempo,min_tempo,max_tempo)
+    return herramienta_lista(lista_listas)
 # Funciones de ordenamiento
 def compareIds(id1, id2):
     if (id1 == id2):
