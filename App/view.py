@@ -255,9 +255,14 @@ while True:
         for genero in generos:
             size_tracks=lt.size(me.getValue(mp.get(me.getValue(mp.get(funcion,genero)),'tracks')))
             size_artists=lt.size(me.getValue(mp.get(me.getValue(mp.get(funcion,genero)),'artists')))
-            print('='*10,genero.upper(),'='*10)
+            artists=lt.subList(me.getValue(mp.get(me.getValue(mp.get(funcion,genero)),'artists')),0,10)
+            print('='*30,genero.upper(),'='*30)
             print('Para el genero',genero,'el tempo se encuentra entre',float(diccionario[genero][0]),'BPM y',float(diccionario[genero][1]),'BPM')
             print('Reproducciones:',size_tracks,'de',size_artists,'artistas')
+            print('-'*50)
+            for i in range(1,lt.size(artists)+1):
+                print('Artista #',i,':',lt.getElement(artists,i))
+
         #**************************************
         stop_memory = getMemory()
         stop_time = getTime()

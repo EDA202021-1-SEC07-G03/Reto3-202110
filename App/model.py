@@ -51,7 +51,7 @@ def add(analyzer,track,hashtags):
     for car in analyzer:
         if car!='tracks' and car!='info'and car!='artists':
             if car=='created_at':
-                track[car]=''.join(track[car][-8:].split(':'))
+                track[car]=(track[car][-8:]).replace(':','')
             update(analyzer,analyzer[car],track,car)
     return analyzer
 def update(analyzer,map,track,car):
@@ -126,7 +126,6 @@ def estudiar(analyzer,min_instrumentalness,max_instrumentalness,min_tempo,max_te
             if lt.size(canciones)<5:
                 lt.addLast(canciones,cancion)
     return canciones,lt.size(ids)
-
 
 #****************************************REQ 4*********************************************************************
 def tracks_por_genero(analyzer,diccionario,lista_generos):
