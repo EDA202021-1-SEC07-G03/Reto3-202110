@@ -62,7 +62,7 @@ def update(analyzer,map,track,car):
         lst=lt.newList('ARRAY_LIST')
     else:
         lst = me.getValue(entry)
-    info_track=newDataEntry(analyzer,track)
+    info_track=me.getValue(mp.get(analyzer['info'],track['track_id']))
     lt.addLast(lst,info_track)
     om.put(map, data, lst)
     return map
@@ -76,21 +76,18 @@ def create_map(analyzer,track,hashtags):
     temp=mp.newMap(maptype='PROBING')
     mp.put(temp,'track_id',track['track_id'])
     mp.put(temp,'artist_id',track['artist_id'])
-    mp.put(temp,'hashtag',me.getValue(mp.get(hashtags,track['track_id'])))
+    mp.put(temp,'hashtag',me.getValue(mp.get(hashtags,track['track_id'])).lower())
     for car in analyzer:
         if car!='tracks' and car!='info'and car!='artists':
             mp.put(temp,car,track[car])
     return temp
-def newDataEntry(analyzer,track):
-    entry= me.getValue(mp.get(analyzer['info'],track['track_id']))
-    return entry
 # Funciones de consulta
 #****************************************REQ 1*********************************************************************
 def rep_car(analyzer,car,min_value,max_value):
     artist=lt.newList('ARRAY_LIST')
-    validas=om.values(analyzer[car],min_value,max_value)
+    validas=om.values(analyzer[car],min_value,max_value)#nlog(n)
     reps=0 #suma de tracks validos
-    for i in range(1,lt.size(validas)+1):
+    for i in range(1,lt.size(validas)+1):#o(nlog(n))  caso prom o mejor caso log(n)
         lista_interna=lt.getElement(validas,i)
         reps+=lt.size(lista_interna)     
         lst_artist=artistas_unicos(lista_interna)
@@ -99,8 +96,6 @@ def rep_car(analyzer,car,min_value,max_value):
             if lt.isPresent(artist,artist_id)==0:
                 lt.addLast(artist,artist_id)
     return reps,lt.size(artist)
-
-    return reps,lt.size(artists)
 #****************************************REQ 2*********************************************************************
 def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
     canciones=lt.newList('ARRAY_LIST')
