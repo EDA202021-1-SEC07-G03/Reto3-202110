@@ -204,10 +204,10 @@ while True:
     elif int(inputs[0]) == 6:
         
         inputs1=mostrar_opciones()
+        diccionario={'reggae':(60,90),'down-tempo':(70,100),'chill-out':(90,120),'hip-hop':(85,115),'jazz and funk':(120,125),'pop':(100,130),'r&b':(60,80),'rock':(110,140),'metal':(100,160)}
         if inputs1=='1':
             generos=input('Ingrese la lista de generos separados por ",": ').split(',')
             funcion=controller.tracks_por_genero(cont,generos,diccionario)
-            diccionario={'reggae':(60,90),'down-tempo':(70,100),'chill-out':(90,120),'hip-hop':(85,115),'jazz and funk':(120,125),'pop':(100,130),'r&b':(60,80),'rock':(110,140),'metal':(100,160)}
         while inputs1!='1':
             mostrar_opciones()
             nuevo=input('Ingrese el nombre del nuevo genero: ')
