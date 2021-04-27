@@ -53,6 +53,8 @@ def rep_car(analyzer,car,min_value,max_value):
     return model.rep_car(analyzer,car,min_value,max_value)
 def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
     return model.festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability)
+def estudiar(analyzer,min_instrumentalness,max_instrumentalness,min_tempo,max_tempo):
+    return model.estudiar(analyzer,min_instrumentalness,max_instrumentalness,min_tempo,max_tempo)
 def tracks_por_genero(analyzer,lista_generos,diccionario):
     return model.tracks_por_genero(analyzer,diccionario,lista_generos)
 '''#Funciones complementarias

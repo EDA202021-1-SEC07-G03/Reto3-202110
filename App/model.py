@@ -117,7 +117,20 @@ def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
                 lt.addLast(canciones,cancion)
     return canciones,lt.size(ids)
 #****************************************REQ 3*********************************************************************
-
+def estudiar(analyzer,min_instrumentalness,max_instrumentalness,min_tempo,max_tempo):
+    canciones=lt.newList('ARRAY_LIST')
+    ids=lt.newList('ARRAY_LIST')
+    tempo_maps=herramienta_lista(om.values(analyzer['tempo'],min_tempo,max_tempo))
+    valores_instrumentalness=om.keys(analyzer['instrumentalness'],min_instrumentalness,max_instrumentalness)
+    for i in range(1,lt.size(tempo_maps)+1):
+        cancion=lt.getElement(tempo_maps,i)
+        id=me.getValue(mp.get(cancion,'track_id'))
+        valor_instrumentalness=float(me.getValue(mp.get(cancion,'instrumentalness')))
+        if lt.isPresent(valores_instrumentalness,valor_instrumentalness) and lt.isPresent(ids,id)==0:
+            lt.addLast(ids,id)
+            if lt.size(canciones)<5:
+                lt.addLast(canciones,cancion)
+    return canciones,lt.size(ids)
 
 
 #****************************************REQ 4*********************************************************************

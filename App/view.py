@@ -196,7 +196,40 @@ while True:
 
 #****************************************REQ 3*********************************************************************
     elif int(inputs[0]) == 5:
-        None
+        min_instrumentalness=float(0.6)
+        max_instrumentalness=float(0.9)
+        min_tempo=float(40)
+        max_tempo=float(60)
+        #------------------------------------------------
+        tracemalloc.start()
+        start_time = getTime()
+        start_memory = getMemory()
+        #***************************************
+        funcion=controller.estudiar(cont,min_instrumentalness,max_instrumentalness,min_tempo,max_tempo)
+        #**************************************
+        stop_memory = getMemory()
+        stop_time = getTime()
+        tracemalloc.stop()
+        delta_time = round(stop_time - start_time,2)
+        delta_memory = round(deltaMemory(start_memory, stop_memory),2)
+        
+        #-------------------------------------------------
+        
+        total=funcion[1]
+        sub=funcion[0]
+        num=0
+        print('Hay un total de canciones de:',total)
+        for i in range(1,lt.size(sub)+1):
+            num+=1
+            info=lt.getElement(sub,i)
+            track_id=me.getValue(mp.get(info,'track_id'))
+            user_id=me.getValue(mp.get(info,'artist_id'))
+            tempo=me.getValue(mp.get(info,'tempo'))
+            instrumentalness=me.getValue(mp.get(info,'instrumentalness'))
+            print('Track',num,':',track_id,'con tempo de',tempo,'y instrumentalness de',instrumentalness)
+        print("\nTiempo [ms]:",delta_time)
+        print("Memoria [kB]:",delta_memory,)
+        print('-'*80)
 
 
 #****************************************REQ 4*********************************************************************
