@@ -57,3 +57,5 @@ def estudiar(analyzer,min_instrumentalness,max_instrumentalness,min_tempo,max_te
     return model.estudiar(analyzer,min_instrumentalness,max_instrumentalness,min_tempo,max_tempo)
 def tracks_por_genero(analyzer,lista_generos,diccionario):
     return model.tracks_por_genero(analyzer,diccionario,lista_generos)
+def genero_por_tiempo(analyzer,hora_min,hora_max)
+    return model.genero_por_tiempo(analyzer,hora_min,hora_max)
