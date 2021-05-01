@@ -277,7 +277,22 @@ while True:
 #****************************************REQ 5*********************************************************************
 
     elif int(inputs[0]) == 7:
-        None
+        #------------------------------------------------
+        tracemalloc.start()
+        start_time = getTime()
+        start_memory = getMemory()
+        #***************************************
+        funcion=controller.genero_por_tiempo(analyzer,hora_min,hora_max)
+        #**************************************
+        stop_memory = getMemory()
+        stop_time = getTime()
+        tracemalloc.stop()
+        delta_time = round(stop_time - start_time,2)
+        delta_memory = round(deltaMemory(start_memory, stop_memory),2)
+        
+        #-------------------------------------------------
+
+
 
     else:
         sys.exit(0)

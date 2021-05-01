@@ -139,6 +139,14 @@ def tracks_por_genero(analyzer,diccionario,lista_generos):
         mp.put(clasificados,genero,info)
     return clasificados
 #****************************************REQ 5*********************************************************************
+def genero_por_tiempo(analyzer,hora_min,hora_max)
+
+
+
+
+
+
+
 
 # Funciones copmlementarias
 def artistas_unicos(lista_mapas):
