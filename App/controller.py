@@ -39,14 +39,17 @@ def init():
     analyzer = model.newAnalyzer()
     return analyzer
 # Funciones para la carga de datos
-def loadData(analyzer, filename, filename2):
+def loadData(analyzer, filename, filename2,filename3):
     filename = cf.data_dir + filename
     input_file = csv.DictReader(open(filename, encoding="utf-8"),delimiter=",")
     filename2 = cf.data_dir + filename2
     input_file2 = csv.DictReader(open(filename2, encoding="utf-8"),delimiter=",")
+    filename3 = cf.data_dir + filename3
+    input_file3 = csv.DictReader(open(filename3, encoding="utf-8"),delimiter=",")
     hashtags=model.hashtags(input_file2)
+    sentiments=model.sentiments(input_file3)
     for line in input_file:
-        model.add(analyzer,line,hashtags)
+        model.add(analyzer,line,hashtags,sentiments)
     return analyzer
 # Funciones de consulta sobre el catálogo
 def rep_car(analyzer,car,min_value,max_value):

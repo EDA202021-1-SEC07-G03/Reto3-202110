@@ -34,6 +34,7 @@ import time
 import tracemalloc
 filename='context_content_features-small.csv'
 filename2='user_track_hashtag_timestamp-small.csv'
+filename3='sentiment_values.csv'
 cont=None
 def printMenu():
     print("Bienvenido")
@@ -91,7 +92,7 @@ while True:
         start_time = getTime()
         start_memory = getMemory()
         #***************************************
-        controller.loadData(cont,filename,filename2)
+        controller.loadData(cont,filename,filename2,filename3)
         #**************************************
         stop_memory = getMemory()
         stop_time = getTime()
