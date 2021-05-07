@@ -32,7 +32,7 @@ from DISClib.ADT import map as mp
 import datetime
 import time
 import tracemalloc
-filename='context_content_features-small.csv'
+filename='context_content_features-test.csv'
 filename2='user_track_hashtag_timestamp-small.csv'
 filename3='sentiment_values.csv'
 cont=None
@@ -197,10 +197,10 @@ while True:
 
 #****************************************REQ 3*********************************************************************
     elif int(inputs[0]) == 5:
-        min_instrumentalness=float(0.6)
-        max_instrumentalness=float(0.9)
-        min_tempo=float(40)
-        max_tempo=float(60)
+        min_instrumentalness=float(0)
+        max_instrumentalness=float(10)
+        min_tempo=float(0)
+        max_tempo=float(200)
         #------------------------------------------------
         tracemalloc.start()
         start_time = getTime()
@@ -278,12 +278,17 @@ while True:
 #****************************************REQ 5*********************************************************************
 
     elif int(inputs[0]) == 7:
+        hora_min=0
+        hora_max=int(55731)
+
+
+
         #------------------------------------------------
         tracemalloc.start()
         start_time = getTime()
         start_memory = getMemory()
         #***************************************
-        funcion=controller.genero_por_tiempo(analyzer,hora_min,hora_max)
+        funcion=controller.genero_por_tiempo(cont,hora_min,hora_max)
         #**************************************
         stop_memory = getMemory()
         stop_time = getTime()
