@@ -49,7 +49,7 @@ def add(analyzer,track,hashtags,sentiments):
         lt.addLast(analyzer['artists'],track['artist_id'])
     mp.put(analyzer['info'],track['track_id'],create_map(analyzer,track,hashtags,sentiments))
     for car in analyzer:
-        if car!='tracks' and car!='info'and car!='artists':
+        if car!='tracks' and car!='info'and car!='artists': 
             if car=='created_at':
                 track[car]=(track[car][-8:]).replace(':','')
             update(analyzer,analyzer[car],track,car)
@@ -149,11 +149,25 @@ def tracks_por_genero(analyzer,diccionario,lista_generos):
     return clasificados
 #****************************************REQ 5*********************************************************************
 def genero_por_tiempo(analyzer,hora_min,hora_max):
+    
+    canciones=lt.newList('ARRAY_LIST')
+    ids=lt.newList('ARRAY_LIST')
+    
+    horas=om.keys(analyzer['created_at'],hora_min,hora_max)
+    
+    
+    for i in range(0,lt.size(horas)):
+        hora=lt.getElement(horas,i)
+        '''id=me.getValue(mp.get(hora,'track_id'))'''
+        
+        
+        '''lt.addLast(ids,id)'''
+        if lt.size(canciones)<5:
+            lt.addLast(canciones,hora)
+        print(canciones,lt.size(ids))
+    return canciones,lt.size(ids)
 
-
-
-
-    return
+    
 
 
 
