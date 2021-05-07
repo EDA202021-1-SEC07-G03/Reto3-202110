@@ -70,10 +70,15 @@ def update(analyzer,map,track,car):
 def hashtags(file):
     temp=mp.newMap(180000,maptype='PROBING')
     for line in file:
-        mp.put(temp,line['track_id'],line['hashtag'])
+        if lt.isPresent(mp.keySet(temp),line['track_id'])==0:
+            mp.put(temp,line['track_id'],lt.newList('ARRAYLIST'))
+        lista=me.getValue(mp.get(temp,line['track_id']))
+        if lt.isPresent(lista, line['hashtag'])==0:
+            lt.addLast(lista,line['hashtag'])
+    print(mp.size(temp))
     return temp
 def sentiments(file):
-    temp=mp.newMap(11000,maptype='PROBING')
+    temp=mp.newMap(11500,maptype='PROBING')
     for line in file:
         mp.put(temp,line['hashtag'],line['vader_avg'])
     return temp
@@ -82,13 +87,15 @@ def create_map(analyzer,track,hashtags,sentiments):
     vader=None
     mp.put(temp,'track_id',track['track_id'])
     mp.put(temp,'artist_id',track['artist_id'])
-    mp.put(temp,'hashtag',me.getValue(mp.get(hashtags,track['track_id'])).lower())
-    if lt.isPresent(mp.keySet(sentiments),me.getValue(mp.get(hashtags,track['track_id'])).lower())!=0:
-        vader=me.getValue(mp.get(sentiments,me.getValue(mp.get(hashtags,track['track_id'])).lower()))
-    mp.put(temp,'vader_avg',vader)
+    mp.put(temp,'hashtag',me.getValue(mp.get(hashtags,track['track_id'])))
+    '''track_hashtag=me.getValue(mp.get(hashtags,track['track_id']))
+    if lt.isPresent(mp.keySet(sentiments),track_hashtag)!=0:
+        vader=me.getValue(mp.get(sentiments,track_hashtag))
+    mp.put(temp,'vader_avg',vader)'''
     for car in analyzer:
-        if car!='tracks' and car!='info'and car!='artists':
+        if car!='tracks' and car!='info'and car!='artists' and car!='created_at':
             mp.put(temp,car,track[car])
+        elif car=='created_at'
     return temp
 # Funciones de consulta
 #****************************************REQ 1*********************************************************************
