@@ -43,11 +43,15 @@ def newAnalyzer():
             analyzer[car] = om.newMap(omaptype='RBT',comparefunction=compare)
     return analyzer
 # Funciones para agregar informacion al catalogo
-def add(analyzer,track,hashtags,sentiments):
+def add(analyzer,track,hashtags):
     lt.addLast(analyzer['tracks'],track)
     if lt.isPresent(analyzer['artists'],track['artist_id'])==0:
         lt.addLast(analyzer['artists'],track['artist_id'])
-    mp.put(analyzer['info'],track['track_id'],create_map(analyzer,track,hashtags,sentiments))
+    if lt.isPresent(mp.keySet(analyzer['info']),track['track_id'])==0:
+        mp.put(analyzer['info'],track['track_id'],create_map(analyzer,track,hashtags))
+        mapa_interno=me.getValue(mp.get(analizer['info'],track['track_id']))
+        mp.put(mapa_interno,'created_at',lt.newList('ARRAY_LIST'))
+    lt.addLast(me.getValue(mp.get(mapa_interno,'created_at')),track['created_at'])
     for car in analyzer:
         if car!='tracks' and car!='info'and car!='artists': 
             if car=='created_at':
@@ -82,7 +86,7 @@ def sentiments(file):
     for line in file:
         mp.put(temp,line['hashtag'],line['vader_avg'])
     return temp
-def create_map(analyzer,track,hashtags,sentiments):
+def create_map(analyzer,track,hashtags):
     temp=mp.newMap(maptype='PROBING')
     vader=None
     mp.put(temp,'track_id',track['track_id'])
@@ -95,7 +99,6 @@ def create_map(analyzer,track,hashtags,sentiments):
     for car in analyzer:
         if car!='tracks' and car!='info'and car!='artists' and car!='created_at':
             mp.put(temp,car,track[car])
-        elif car=='created_at'
     return temp
 # Funciones de consulta
 #****************************************REQ 1*********************************************************************
