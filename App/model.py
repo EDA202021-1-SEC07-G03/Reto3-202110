@@ -47,15 +47,14 @@ def add(analyzer,track,hashtags):
     lt.addLast(analyzer['tracks'],track)
     if lt.isPresent(analyzer['artists'],track['artist_id'])==0:
         lt.addLast(analyzer['artists'],track['artist_id'])
-    if lt.isPresent(mp.keySet(analyzer['info']),track['track_id'])==0:
+    if mp.contains(analyzer['info'],track['track_id'])==False:
         mp.put(analyzer['info'],track['track_id'],create_map(analyzer,track,hashtags))
-        mapa_interno=me.getValue(mp.get(analizer['info'],track['track_id']))
-        mp.put(mapa_interno,'created_at',lt.newList('ARRAY_LIST'))
+    mapa_interno=me.getValue(mp.get(analyzer['info'],track['track_id']))
     lt.addLast(me.getValue(mp.get(mapa_interno,'created_at')),track['created_at'])
     for car in analyzer:
-        if car!='tracks' and car!='info'and car!='artists': 
-            if car=='created_at':
-                track[car]=(track[car][-8:]).replace(':','')
+        if car!='tracks' and car!='info'and car!='artists':
+            '''if car=='created_at':
+                update_created(analyzer,analyzer['created_at'])''' 
             update(analyzer,analyzer[car],track,car)
     return analyzer
 def update(analyzer,map,track,car):
@@ -74,12 +73,11 @@ def update(analyzer,map,track,car):
 def hashtags(file):
     temp=mp.newMap(180000,maptype='PROBING')
     for line in file:
-        if lt.isPresent(mp.keySet(temp),line['track_id'])==0:
+        if mp.contains(temp,line['track_id'])==False:
             mp.put(temp,line['track_id'],lt.newList('ARRAYLIST'))
         lista=me.getValue(mp.get(temp,line['track_id']))
         if lt.isPresent(lista, line['hashtag'])==0:
             lt.addLast(lista,line['hashtag'])
-    print(mp.size(temp))
     return temp
 def sentiments(file):
     temp=mp.newMap(11500,maptype='PROBING')
@@ -92,13 +90,10 @@ def create_map(analyzer,track,hashtags):
     mp.put(temp,'track_id',track['track_id'])
     mp.put(temp,'artist_id',track['artist_id'])
     mp.put(temp,'hashtag',me.getValue(mp.get(hashtags,track['track_id'])))
-    '''track_hashtag=me.getValue(mp.get(hashtags,track['track_id']))
-    if lt.isPresent(mp.keySet(sentiments),track_hashtag)!=0:
-        vader=me.getValue(mp.get(sentiments,track_hashtag))
-    mp.put(temp,'vader_avg',vader)'''
     for car in analyzer:
         if car!='tracks' and car!='info'and car!='artists' and car!='created_at':
             mp.put(temp,car,track[car])
+        mp.put(temp,'created_at',lt.newList('ARRAY_LIST'))
     return temp
 # Funciones de consulta
 #****************************************REQ 1*********************************************************************

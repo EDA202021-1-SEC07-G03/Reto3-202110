@@ -46,11 +46,14 @@ def loadData(analyzer, filename, filename2,filename3):
     input_file2 = csv.DictReader(open(filename2, encoding="utf-8"),delimiter=",")
     filename3 = cf.data_dir + filename3
     input_file3 = csv.DictReader(open(filename3, encoding="utf-8"),delimiter=",")
-    sentiments=model.sentiments(input_file3)
     hashtags=model.hashtags(input_file2)
+    sentiments=model.sentiments(input_file3)
     for line in input_file:
-        print(line)
+        line['created_at']=(line['created_at'][-8:]).replace(':','')
         model.add(analyzer,line,hashtags)
+    print('='*90)
+    print(om.minKey(analyzer['created_at']))
+    print('='*90)
     return analyzer
 # Funciones de consulta sobre el catálogo
 def rep_car(analyzer,car,min_value,max_value):
