@@ -199,8 +199,8 @@ while True:
     elif int(inputs[0]) == 5:
         min_instrumentalness=float(0)
         max_instrumentalness=float(10)
-        min_tempo=float(0)
-        max_tempo=float(200)
+        min_tempo=float(40)
+        max_tempo=float(60)
         #------------------------------------------------
         tracemalloc.start()
         start_time = getTime()
@@ -278,17 +278,17 @@ while True:
 #****************************************REQ 5*********************************************************************
 
     elif int(inputs[0]) == 7:
-        hora_min=0
-        hora_max=int(55731)
+        hora_min=int('071500')
+        hora_max=int('094500')
 
 
-
+        diccionario={'reggae':(60,90),'down-tempo':(70,100),'chill-out':(90,120),'hip-hop':(85,115),'jazz and funk':(120,125),'pop':(100,130),'r&b':(60,80),'rock':(110,140),'metal':(100,160)}
         #------------------------------------------------
         tracemalloc.start()
         start_time = getTime()
         start_memory = getMemory()
         #***************************************
-        funcion=controller.genero_por_tiempo(cont,hora_min,hora_max)
+        funcion=controller.genero_por_tiempo(cont,diccionario,hora_min,hora_max)
         #**************************************
         stop_memory = getMemory()
         stop_time = getTime()

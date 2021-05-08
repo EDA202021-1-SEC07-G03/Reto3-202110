@@ -51,6 +51,7 @@ def loadData(analyzer, filename, filename2,filename3):
     for line in input_file:
         line['created_at']=(line['created_at'][-8:]).replace(':','')
         model.add(analyzer,line,hashtags)
+    analyzer['sentiments']=sentiments
     return analyzer
 # Funciones de consulta sobre el catálogo
 def rep_car(analyzer,car,min_value,max_value):
@@ -61,5 +62,5 @@ def estudiar(analyzer,min_instrumentalness,max_instrumentalness,min_tempo,max_te
     return model.estudiar(analyzer,min_instrumentalness,max_instrumentalness,min_tempo,max_tempo)
 def tracks_por_genero(analyzer,lista_generos,diccionario):
     return model.tracks_por_genero(analyzer,diccionario,lista_generos)
-def genero_por_tiempo(analyzer,hora_min,hora_max):
-    return model.genero_por_tiempo(analyzer,hora_min,hora_max)
+def genero_por_tiempo(analyzer,diccionario,hora_min,hora_max):
+    return model.genero_por_tiempo(analyzer,diccionario,hora_min,hora_max)
