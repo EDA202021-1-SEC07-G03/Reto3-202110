@@ -53,8 +53,6 @@ def add(analyzer,track,hashtags):
     lt.addLast(me.getValue(mp.get(mapa_interno,'created_at')),track['created_at'])
     for car in analyzer:
         if car!='tracks' and car!='info'and car!='artists':
-            '''if car=='created_at':
-                update_created(analyzer,analyzer['created_at'])''' 
             update(analyzer,analyzer[car],track,car)
     return analyzer
 def update(analyzer,map,track,car):
