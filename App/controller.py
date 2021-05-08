@@ -51,9 +51,6 @@ def loadData(analyzer, filename, filename2,filename3):
     for line in input_file:
         line['created_at']=(line['created_at'][-8:]).replace(':','')
         model.add(analyzer,line,hashtags)
-    print('='*90)
-    print(om.minKey(analyzer['created_at']))
-    print('='*90)
     return analyzer
 # Funciones de consulta sobre el catálogo
 def rep_car(analyzer,car,min_value,max_value):
