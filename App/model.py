@@ -75,12 +75,12 @@ def hashtags(file):
             mp.put(temp,line['track_id'],lt.newList('ARRAYLIST'))
         lista=me.getValue(mp.get(temp,line['track_id']))
         if lt.isPresent(lista, line['hashtag'])==0:
-            lt.addLast(lista,line['hashtag'])
+            lt.addLast(lista,line['hashtag'].lower())
     return temp
 def sentiments(file):
     temp=mp.newMap(11500,maptype='PROBING')
     for line in file:
-        mp.put(temp,line['hashtag'],line['vader_avg'])
+        mp.put(temp,line['hashtag'].lower(),line['vader_avg'])
     return temp
 def create_map(analyzer,track,hashtags):
     temp=mp.newMap(maptype='PROBING')
@@ -156,26 +156,35 @@ def genero_por_tiempo(analyzer,diccionario,hora_min,hora_max):
     ordenados=om.newMap(comparefunction=compare)
     generos=mp.newMap(maptype='PROBING')
     ranking=om.newMap(comparefunction=compare)
+    unicos=lt.newList()
     for genero in diccionario:
         mp.put(generos,genero,lt.newList('ARRAY_LIST'))
     validos=om.values(analyzer['created_at'],hora_min,hora_max)
     for i in range(1,lt.size(validos)+1):
         mapa_interno=lt.firstElement(lt.getElement(validos,i))
         tempo=me.getValue(mp.get(mapa_interno,'tempo'))
+        if lt.isPresent(unicos,me.getValue(mp.get(mapa_interno,'track_id')))==0:
+            lt.addLast(unicos,me.getValue(mp.get(mapa_interno,'track_id')))
         for genero in diccionario:
             if tempo in range(diccionario[genero][0],diccionario[genero][1]):
                 lista_tracks=me.getValue(mp.get(generos,genero))
                 lt.addLast(lista_tracks,mapa_interno)
     for i in range(1,lt.size(mp.keySet(generos))+1):
-        om.put(ordenados,lt.size(lt.getElement(me.getValue(mp.get(generos,genero)),i)),genero)
+        genero=lt.getElement(mp.keySet(generos),i)
+        canciones_genero=me.getValue(mp.get(generos,genero))
+        om.put(ordenados,lt.size(canciones_genero),genero)
     mayor_cantidad=om.maxKey(ordenados)
-    mayor_genero=om.get(ordenados,mayor_cantidad)
+    mayor_genero=me.getValue(om.get(ordenados,mayor_cantidad))
+    print(mayor_genero)
     for i in range(1,lt.size(me.getValue(mp.get(generos,mayor_genero)))+1):
         mapa_interno=lt.getElement(me.getValue(mp.get(generos,genero)),i)
         om.put(canciones,lt.size(me.getValue(mp.get(mapa_interno,'hashtag'))),mapa_interno)
-    rank_valores=lt.sublist(om.keySet(canciones),10)
-    for i in range(1,11):
-        num_hashtags=lt.getElement(rank_valores)
+    maximo=10
+    if lt.size(om.keySet(canciones))<maximo:
+        maximo=lt.size(om.keySet(canciones))
+    rank_valores=lt.subList(om.keySet(canciones),0,maximo)
+    for i in range(1,lt.size(rank_valores)+1):
+        num_hashtags=lt.getElement(rank_valores,i)
         track=me.getValue(om.get(canciones,num_hashtags))
         lista_hashtags=me.getValue(mp.get(track,'hashtag'))
         contador=0
@@ -186,7 +195,7 @@ def genero_por_tiempo(analyzer,diccionario,hora_min,hora_max):
                 sumatoria+=me.getValue(mp.get(sentiments,hashtag))
                 contador+=1
         om.put(ranking,num_hashtags,(me.getValue(mp.get(track,'track_id')),sumatoria/contador))
-    return ranking
+    return ranking,lt.size(validos),generos,mayor_genero,lt.size(unicos)
 
     
 

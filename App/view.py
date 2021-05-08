@@ -32,7 +32,7 @@ from DISClib.ADT import map as mp
 import datetime
 import time
 import tracemalloc
-filename='context_content_features-small.csv'
+filename='context_content_features-test.csv'
 filename2='user_track_hashtag_timestamp-small.csv'
 filename3='sentiment_values.csv'
 cont=None
@@ -297,7 +297,22 @@ while True:
         delta_memory = round(deltaMemory(start_memory, stop_memory),2)
         
         #-------------------------------------------------
-
+        print('Hay un total de',funcion[1],'reproducciones entre',hora_min,'y',hora_max)
+        print('='*30,'Generos y reproducciones','='*30)
+        r=1
+        for genero in diccionario:
+            print('TOP'+str(r)+':',genero,'con',lt.size(me.getValue(mp.get(funcion[2],genero))),'reps'
+            r+=1
+        print('El genero con más reps es',funcion[3],'con',lt.size(me.getValue(mp.get(funcion[2],funcion[3]))),'reps...')
+        print('='*30,funcion[3].upper(),'SENTIMENT ANALISIS','='*30)
+        print(funcion[3],'tiene',funcion[4],'tracks unicos..')
+        print('Los top',lt.size(funcion[0]),'tracks son:\n')
+        r=1
+        for i in range(1,lt.size(om.keySet(funcion[0]))+1):
+            track_id=om.get(funcion[1])
+            vader=lt.getElement(funcion[0],i)[1]
+            print('TOP'+str(r)+' track:',track_id,'con',lt.size(me.getValue(mp.get(funcion[2],genero))),'reps'
+            r+=1
 
 
     else:
