@@ -120,7 +120,7 @@ def festejar(analyzer,min_energy,max_energy,min_danceability,max_danceability):
         cancion=lt.getElement(energy_maps,i)
         id=me.getValue(mp.get(cancion,'track_id'))
         valor_dance=float(me.getValue(mp.get(cancion,'danceability')))
-        if lt.isPresent(valores_dance,valor_dance) and lt.isPresent(ids,id)==0:
+        if lt.isPresent(valores_dance,valor_dance)!=0 and lt.isPresent(ids,id)==0:
             lt.addLast(ids,id)
             if lt.size(canciones)<5:
                 lt.addLast(canciones,cancion)
@@ -135,7 +135,7 @@ def estudiar(analyzer,min_instrumentalness,max_instrumentalness,min_tempo,max_te
         cancion=lt.getElement(tempo_maps,i)
         id=me.getValue(mp.get(cancion,'track_id'))
         valor_instrumentalness=float(me.getValue(mp.get(cancion,'instrumentalness')))
-        if lt.isPresent(valores_instrumentalness,valor_instrumentalness) and lt.isPresent(ids,id)==0:
+        if lt.isPresent(valores_instrumentalness,valor_instrumentalness)!=0 and lt.isPresent(ids,id)==0:
             lt.addLast(ids,id)
             if lt.size(canciones)<5:
                 lt.addLast(canciones,cancion)
