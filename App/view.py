@@ -32,7 +32,7 @@ from DISClib.ADT import map as mp
 import datetime
 import time
 import tracemalloc
-filename='context_content_features-test.csv'
+filename='context_content_features-small.csv'
 filename2='user_track_hashtag_timestamp-small.csv'
 filename3='sentiment_values.csv'
 cont=None
@@ -64,7 +64,7 @@ def horas(hora):
                 hora='0'+hora
             i=2
             x='pm'
-            if hora<120000:
+            if int(hora)<120000:
                 x='am'
             while i<len(hora):
                 hora=hora[:i]+':'+hora[i:]
@@ -258,12 +258,12 @@ while True:
         if inputs1=='1':
             generos=input('Ingrese la lista de generos separados por ",": ').split(',')
             funcion=controller.tracks_por_genero(cont,generos,diccionario)
-        while inputs1!='1':
-            mostrar_opciones()
+        while inputs1=='2':
             nuevo=input('Ingrese el nombre del nuevo genero: ')
             min_nuevo=input('Ingrese el valor del tempo mínimo: ')
             max_nuevo=input('Ingrese el valor del tempo máximo: ')
             diccionario[nuevo]=(min_nuevo,max_nuevo)
+            inputs1=mostrar_opciones()
         #------------------------------------------------
         tracemalloc.start()
         start_time = getTime()
