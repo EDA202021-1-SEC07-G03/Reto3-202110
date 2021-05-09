@@ -32,7 +32,7 @@ from DISClib.ADT import map as mp
 import datetime
 import time
 import tracemalloc
-filename='context_content_features-small.csv'
+filename='context_content_features-test.csv'
 filename2='user_track_hashtag_timestamp-small.csv'
 filename3='sentiment_values.csv'
 cont=None
@@ -59,6 +59,17 @@ def deltaMemory(start_memory, stop_memory):
         delta_memory = delta_memory + stat.size_diff
     delta_memory = delta_memory/1024.0
     return delta_memory
+def horas(hora):
+            if len(hora)==5:
+                hora='0'+hora
+            i=2
+            x='pm'
+            if hora<120000:
+                x='am'
+            while i<len(hora):
+                hora=hora[:i]+':'+hora[i:]
+                i+=3
+            return hora+x
 cont = None
 """
 Menu principal
@@ -124,7 +135,6 @@ while True:
         max_value=float(input('Ingrese el valor máximo para el rango de la característica: '))
         '''
         #pruebas
-
         car='instrumentalness'
         min_value=float(0.75)
         max_value=float(1)
@@ -201,6 +211,13 @@ while True:
         max_instrumentalness=float(10)
         min_tempo=float(40)
         max_tempo=float(60)
+
+        '''
+        min_instrumentalness=float(input('Ingrese el valor mínimo para instrumentalness: '))
+        max_instrumentalness=float(input('Ingrese el valor máximo para instrumentalness: '))
+        min_tempo=float(input('Ingrese el valor mínimo para tempo: '))
+        max_tempo=float(input('Ingrese el valor máximo para tempo: '))
+        '''
         #------------------------------------------------
         tracemalloc.start()
         start_time = getTime()
@@ -236,7 +253,6 @@ while True:
 #****************************************REQ 4*********************************************************************
 
     elif int(inputs[0]) == 6:
-        
         inputs1=mostrar_opciones()
         diccionario={'reggae':(60,90),'down-tempo':(70,100),'chill-out':(90,120),'hip-hop':(85,115),'jazz and funk':(120,125),'pop':(100,130),'r&b':(60,80),'rock':(110,140),'metal':(100,160)}
         if inputs1=='1':
@@ -280,8 +296,10 @@ while True:
     elif int(inputs[0]) == 7:
         hora_min=int('071500')
         hora_max=int('094500')
-
-
+        '''
+        hora_min=int(input('Ingrese el valor mínimo de hora: '))
+        hora_max=int(input('Ingrese el valor máximo de hora: '))
+        '''
         diccionario={'reggae':(60,90),'down-tempo':(70,100),'chill-out':(90,120),'hip-hop':(85,115),'jazz and funk':(120,125),'pop':(100,130),'r&b':(60,80),'rock':(110,140),'metal':(100,160)}
         #------------------------------------------------
         tracemalloc.start()
@@ -297,6 +315,8 @@ while True:
         delta_memory = round(deltaMemory(start_memory, stop_memory),2)
         
         #-------------------------------------------------
+        hora_min=horas(str(hora_min))
+        hora_max=horas(str(hora_max))
         print('Hay un total de',funcion[1],'reproducciones entre',hora_min,'y',hora_max)
         print('='*30,'Generos y reproducciones','='*30)
         r=1
@@ -317,7 +337,9 @@ while True:
             hashtags=lt.getElement(funcion[0],i)[1]
             print('TOP '+str(r)+' track:',track_id,'con',hashtags,'hahtags y VADER =',vader)
             r+=1
-
+        print("\nTiempo [ms]:",delta_time)
+        print("Memoria [kB]:",delta_memory,)
+        print('-'*80)
 
     else:
         sys.exit(0)

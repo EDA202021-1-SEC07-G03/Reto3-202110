@@ -164,8 +164,8 @@ def genero_por_tiempo(analyzer,diccionario,hora_min,hora_max):
     validos=herramienta_lista(om.values(analyzer['created_at'],hora_min,hora_max))
     for i in range(1,lt.size(validos)+1):
         mapa_interno=lt.getElement(validos,i)
-        if i in [1,4,7]:
-            print(lt.getElement(validos,i),'\n','='*80,'\n',mapa_interno,'\n','*'*80,'\n','*'*80,'\n')
+        '''if i in [1,4,7]:
+            print(lt.getElement(validos,i),'\n','='*80,'\n',mapa_interno,'\n','*'*80,'\n','*'*80,'\n')'''
         tempo=me.getValue(mp.get(mapa_interno,'tempo'))
         for genero in diccionario:
             lista_tracks=me.getValue(mp.get(generos,genero))
