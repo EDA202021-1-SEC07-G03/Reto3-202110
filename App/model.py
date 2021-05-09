@@ -157,14 +157,15 @@ def genero_por_tiempo(analyzer,diccionario,hora_min,hora_max):
     canciones=lt.newList('ARRAY_LIST',comparebyhashtags)
     ordenados=om.newMap(comparefunction=compare)
     generos=mp.newMap(maptype='PROBING')
-    ranking=lt.newList('ARRAY_LIST',comparebyhashtags)
+    ranking=lt.newList('ARRAY_LIST')
     unicos=lt.newList()
     for genero in diccionario:
         mp.put(generos,genero,lt.newList('ARRAY_LIST'))
-    validos=om.values(analyzer['created_at'],hora_min,hora_max)
+    validos=herramienta_lista(om.values(analyzer['created_at'],hora_min,hora_max))
     for i in range(1,lt.size(validos)+1):
-        print(lt.getElement(validos,i),'='*80,'\n')
-        mapa_interno=lt.firstElement(lt.getElement(validos,i))
+        mapa_interno=lt.getElement(validos,i)
+        if i in [1,4,7]:
+            print(lt.getElement(validos,i),'\n','='*80,'\n',mapa_interno,'\n','*'*80,'\n','*'*80,'\n')
         tempo=me.getValue(mp.get(mapa_interno,'tempo'))
         for genero in diccionario:
             lista_tracks=me.getValue(mp.get(generos,genero))
@@ -203,6 +204,7 @@ def genero_por_tiempo(analyzer,diccionario,hora_min,hora_max):
             promedio=sumatoria/contador
         tupla=(me.getValue(mp.get(track,'track_id')),num_hashtags,promedio)
         lt.addLast(ranking,tupla)
+    mrg.sort(ranking,comparebyhashtags)
     return ranking,lt.size(validos),ordenados,mayor_genero,lt.size(unicos),generos
 
     
@@ -236,12 +238,6 @@ def compare(dato1, dato2):
     else:
         return -1
 def comparebyhashtags(dato1, dato2):
-    print(dato1,dato2)
     dato1=dato1[1]
     dato2=dato2[1]
-    if (dato1 == dato2):
-        return 0
-    elif (dato1 > dato2):
-        return 1
-    else:
-        return -1
+    return dato1>dato2
