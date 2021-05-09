@@ -300,18 +300,22 @@ while True:
         print('Hay un total de',funcion[1],'reproducciones entre',hora_min,'y',hora_max)
         print('='*30,'Generos y reproducciones','='*30)
         r=1
-        for genero in diccionario:
-            print('TOP'+str(r)+':',genero,'con',lt.size(me.getValue(mp.get(funcion[2],genero))),'reps'
+        for i in range(om.size(funcion[2])):
+            reps=om.maxKey(funcion[2])
+            genero=me.getValue(om.get(funcion[2],reps))
+            print('TOP '+str(r)+':',genero,'con',reps,'reps')
+            om.deleteMax(funcion[2])
             r+=1
-        print('El genero con más reps es',funcion[3],'con',lt.size(me.getValue(mp.get(funcion[2],funcion[3]))),'reps...')
+        print('El genero con más reps es',funcion[3],'con',lt.size(me.getValue(mp.get(funcion[5],funcion[3]))),'reps...')
         print('='*30,funcion[3].upper(),'SENTIMENT ANALISIS','='*30)
         print(funcion[3],'tiene',funcion[4],'tracks unicos..')
         print('Los top',lt.size(funcion[0]),'tracks son:\n')
         r=1
-        for i in range(1,lt.size(om.keySet(funcion[0]))+1):
-            track_id=om.get(funcion[1])
-            vader=lt.getElement(funcion[0],i)[1]
-            print('TOP'+str(r)+' track:',track_id,'con',lt.size(me.getValue(mp.get(funcion[2],genero))),'reps'
+        for i in range(1,lt.size(funcion[0])+1):
+            track_id=lt.getElement(funcion[0],i)[0]
+            vader=lt.getElement(funcion[0],i)[2]
+            hashtags=lt.getElement(funcion[0],i)[1]
+            print('TOP '+str(r)+' track:',track_id,'con',hashtags,'hahtags y VADER =',vader)
             r+=1
 
 
