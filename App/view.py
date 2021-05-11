@@ -129,7 +129,6 @@ while True:
 
 #****************************************REQ 1*********************************************************************
     elif int(inputs[0]) == 3:
-        '''
         car=input('Ingrese la característica a consultar: ').lower()
         min_value=float(input('Ingrese el valor mínimo para el rango de la característica: '))
         max_value=float(input('Ingrese el valor máximo para el rango de la característica: '))
@@ -138,6 +137,7 @@ while True:
         car='instrumentalness'
         min_value=float(0.75)
         max_value=float(1)
+        '''
         #------------------------------------------------
         tracemalloc.start()
         start_time = getTime()
@@ -164,7 +164,6 @@ while True:
 #****************************************REQ 2*********************************************************************
 
     elif int(inputs[0]) == 4:
-        '''
         min_energy=float(input('Ingrese el valor mínimo para Energy: '))
         max_energy=float(input('Ingrese el valor máximo para Energy: '))
         min_danceability=float(input('Ingrese el valor mínimo para Danceability: '))
@@ -174,6 +173,7 @@ while True:
         max_energy=float(0.75)
         min_danceability=float(0.75)
         max_danceability=float(1)
+        '''
         #------------------------------------------------
         tracemalloc.start()
         start_time = getTime()
@@ -207,6 +207,7 @@ while True:
 
 #****************************************REQ 3*********************************************************************
     elif int(inputs[0]) == 5:
+        '''
         min_instrumentalness=float(0)
         max_instrumentalness=float(10)
         min_tempo=float(40)
@@ -217,7 +218,6 @@ while True:
         max_instrumentalness=float(input('Ingrese el valor máximo para instrumentalness: '))
         min_tempo=float(input('Ingrese el valor mínimo para tempo: '))
         max_tempo=float(input('Ingrese el valor máximo para tempo: '))
-        '''
         #------------------------------------------------
         tracemalloc.start()
         start_time = getTime()
@@ -248,7 +248,6 @@ while True:
         print("\nTiempo [ms]:",delta_time)
         print("Memoria [kB]:",delta_memory,)
         print('-'*80)
-
 
 #****************************************REQ 4*********************************************************************
 
@@ -294,12 +293,12 @@ while True:
 #****************************************REQ 5*********************************************************************
 
     elif int(inputs[0]) == 7:
+        '''
         hora_min=int('071500')
         hora_max=int('094500')
         '''
-        hora_min=int(input('Ingrese el valor mínimo de hora: '))
-        hora_max=int(input('Ingrese el valor máximo de hora: '))
-        '''
+        hora_min=int(input('Ingrese el valor mínimo de hora: ').replace(':',''))
+        hora_max=int(input('Ingrese el valor máximo de hora: ').replace(':',''))
         diccionario={'reggae':(60,90),'down-tempo':(70,100),'chill-out':(90,120),'hip-hop':(85,115),'jazz and funk':(120,125),'pop':(100,130),'r&b':(60,80),'rock':(110,140),'metal':(100,160)}
         #------------------------------------------------
         tracemalloc.start()

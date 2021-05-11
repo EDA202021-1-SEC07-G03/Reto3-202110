@@ -70,6 +70,9 @@ def update(analyzer,map,track,car):
     return map
 # Funciones para creacion de datos
 def hashtags(file):
+    '''Tiene como input el nombre del archivo con los hashtags y crea un mapa donde 
+        las llaves son el track_id y el valor es una lista de los hashtags que tiene el track.
+    '''
     temp=mp.newMap(180000,maptype='PROBING')
     for line in file:
         if mp.contains(temp,line['track_id'])==False:
@@ -79,12 +82,19 @@ def hashtags(file):
             lt.addLast(lista,line['hashtag'].lower())
     return temp
 def sentiments(file):
+    '''Tiene como input el nombre del archivo de los sentiment values y como output un mapa donde las llaves son el nombre 
+    de cada hashtag y el valor de cada una su respectivo vader_avg.
+    '''
     temp=mp.newMap(11500,maptype='PROBING')
     for line in file:
         if len(line['vader_avg'])>0:
             mp.put(temp,line['hashtag'].lower(),float(line['vader_avg']))
     return temp
 def create_map(analyzer,track,hashtags):
+    '''Tiene como input el catalogo de información, la linea del input file y el mapa de hashtags, donde se crea el output de
+        un mapa por track donde las llaves son las características y sus valores son los correspondientes del csv.
+        Las únicas listas son para las llaves 'hashtag' y 'created_at'.
+        '''
     temp=mp.newMap(maptype='PROBING')
     vader=None
     mp.put(temp,'track_id',track['track_id'])
@@ -164,8 +174,6 @@ def genero_por_tiempo(analyzer,diccionario,hora_min,hora_max):
     validos=herramienta_lista(om.values(analyzer['created_at'],hora_min,hora_max))
     for i in range(1,lt.size(validos)+1):
         mapa_interno=lt.getElement(validos,i)
-        '''if i in [1,4,7]:
-            print(lt.getElement(validos,i),'\n','='*80,'\n',mapa_interno,'\n','*'*80,'\n','*'*80,'\n')'''
         tempo=me.getValue(mp.get(mapa_interno,'tempo'))
         for genero in diccionario:
             lista_tracks=me.getValue(mp.get(generos,genero))
@@ -222,6 +230,7 @@ def artistas_unicos(lista_mapas):
             lt.addLast(lista,user)
     return lista
 def herramienta_lista(lista):
+    '''Tiene como input una lista de listas y como output una lista unificada de sus elementos'''
     temp=lt.newList('ARRAY_LIST')
     for i in range(1,lt.size(lista)+1):
         sub=lt.getElement(lista,i)
