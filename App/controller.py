@@ -48,9 +48,13 @@ def loadData(analyzer, filename, filename2,filename3):
     input_file3 = csv.DictReader(open(filename3, encoding="utf-8"),delimiter=",")
     hashtags=model.hashtags(input_file2)
     sentiments=model.sentiments(input_file3)
+    t = 616308
+    i = 0
     for line in input_file:
         line['created_at']=(line['created_at'][-8:]).replace(':','')
         model.add(analyzer,line,hashtags)
+        print(f"{i}/{t}",end='\r')
+        i += 1
     analyzer['sentiments']=sentiments
     return analyzer
 # Funciones de consulta sobre el catálogo

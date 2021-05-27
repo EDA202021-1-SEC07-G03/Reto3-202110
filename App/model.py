@@ -73,6 +73,8 @@ def hashtags(file):
     '''Tiene como input el nombre del archivo con los hashtags y crea un mapa donde 
         las llaves son el track_id y el valor es una lista de los hashtags que tiene el track.
     '''
+    t = 878006
+    i = 0
     temp=mp.newMap(180000,maptype='PROBING')
     for line in file:
         if mp.contains(temp,line['track_id'])==False:
@@ -80,6 +82,8 @@ def hashtags(file):
         lista=me.getValue(mp.get(temp,line['track_id']))
         if lt.isPresent(lista, line['hashtag'].lower())==0:
             lt.addLast(lista,line['hashtag'].lower())
+        print(f"{i}/{t}",end='\r')
+        i += 1
     return temp
 def sentiments(file):
     '''Tiene como input el nombre del archivo de los sentiment values y como output un mapa donde las llaves son el nombre 
@@ -172,6 +176,7 @@ def genero_por_tiempo(analyzer,diccionario,hora_min,hora_max):
     for genero in diccionario:
         mp.put(generos,genero,lt.newList('ARRAY_LIST'))
     validos=herramienta_lista(om.values(analyzer['created_at'],hora_min,hora_max))
+    '''Validos es una lista con los mapas de tracks que tienen eventos a la hora indicada'''
     for i in range(1,lt.size(validos)+1):
         mapa_interno=lt.getElement(validos,i)
         tempo=me.getValue(mp.get(mapa_interno,'tempo'))
@@ -179,10 +184,12 @@ def genero_por_tiempo(analyzer,diccionario,hora_min,hora_max):
             lista_tracks=me.getValue(mp.get(generos,genero))
             if diccionario[genero][0]<=tempo<=diccionario[genero][1]:
                 lt.addLast(lista_tracks,mapa_interno)
+    '''En este for se analiza cada mapa interno de los tracks para añadirlo a la lista de los generos que le corresponda'''
     for i in range(1,lt.size(mp.keySet(generos))+1):
         genero=lt.getElement(mp.keySet(generos),i)
         canciones_genero=me.getValue(mp.get(generos,genero))
         om.put(ordenados,lt.size(canciones_genero),genero)
+    '''En este for se analiza cada genero y se suman sus tracks, por lo que quedan en un arbol ordenado para sacar el mayor'''
     mayor_cantidad=om.maxKey(ordenados)
     mayor_genero=me.getValue(om.get(ordenados,mayor_cantidad))
     for i in range(1,lt.size(me.getValue(mp.get(generos,mayor_genero)))+1):
@@ -191,6 +198,9 @@ def genero_por_tiempo(analyzer,diccionario,hora_min,hora_max):
             lt.addLast(unicos,me.getValue(mp.get(mapa_interno,'track_id')))
         cantidad_hashtags=lt.size(me.getValue(mp.get(mapa_interno,'hashtag')))
         lt.addLast(canciones,(mapa_interno,cantidad_hashtags))
+    '''En este for se analizan los tracks unicos al crear una lista sin repeticiones de estos,
+        además se añade a una lista en forma de tupla con su mapa interno y la cantidad de hashtags que tiene el track
+    '''
     maximo=10
     if lt.size(canciones)<maximo:
         maximo=lt.size(canciones)
@@ -214,9 +224,6 @@ def genero_por_tiempo(analyzer,diccionario,hora_min,hora_max):
         lt.addLast(ranking,tupla)
     mrg.sort(ranking,comparebyhashtags)
     return ranking,lt.size(validos),ordenados,mayor_genero,lt.size(unicos),generos
-
-    
-
 
 
 # Funciones copmlementarias
